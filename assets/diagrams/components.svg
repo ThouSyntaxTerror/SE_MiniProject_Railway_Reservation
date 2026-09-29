@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#20384a"/></marker>
+    <style>
+      .component{fill:#fff;stroke:#20384a;stroke-width:2}.external{fill:#fff7e6;stroke:#a56b12;stroke-width:2}
+      .data{fill:#eef6f8;stroke:#1f6f8b;stroke-width:2}.dep{fill:none;stroke:#20384a;stroke-width:2;stroke-dasharray:8,5;marker-end:url(#arrow)}
+      .title{font:700 26px Arial,sans-serif;fill:#143a5a}.name{font:700 18px Arial,sans-serif;fill:#17212b}.st{font:15px Arial,sans-serif;fill:#52606d}.edge{font:14px Arial,sans-serif;fill:#52606d}
+    </style>
+  </defs>
+  <text x="600" y="40" text-anchor="middle" class="title">RRS UML Component Diagram — Layered Architecture</text>
+  <rect x="50" y="95" width="220" height="88" rx="5" class="external"/><text x="160" y="130" text-anchor="middle" class="name">Passenger / Admin</text><text x="160" y="155" text-anchor="middle" class="st">Browser client</text>
+  <rect x="360" y="95" width="220" height="88" rx="5" class="component"/><text x="470" y="128" text-anchor="middle" class="st">«component»</text><text x="470" y="156" text-anchor="middle" class="name">Web UI</text>
+  <rect x="690" y="95" width="250" height="88" rx="5" class="component"/><text x="815" y="128" text-anchor="middle" class="st">«component»</text><text x="815" y="156" text-anchor="middle" class="name">REST API / Authorization</text>
+  <path d="M270 139 H360" class="dep"/><text x="315" y="125" text-anchor="middle" class="edge">HTTPS</text>
+  <path d="M580 139 H690" class="dep"/><text x="635" y="125" text-anchor="middle" class="edge">JSON/HTTPS</text>
+
+  <rect x="80" y="285" width="210" height="88" rx="5" class="component"/><text x="185" y="318" text-anchor="middle" class="st">«component»</text><text x="185" y="346" text-anchor="middle" class="name">Auth Service</text>
+  <rect x="345" y="285" width="210" height="88" rx="5" class="component"/><text x="450" y="318" text-anchor="middle" class="st">«component»</text><text x="450" y="346" text-anchor="middle" class="name">Train Search</text>
+  <rect x="610" y="285" width="210" height="88" rx="5" class="component"/><text x="715" y="318" text-anchor="middle" class="st">«component»</text><text x="715" y="346" text-anchor="middle" class="name">Booking Service</text>
+  <rect x="875" y="285" width="210" height="88" rx="5" class="component"/><text x="980" y="318" text-anchor="middle" class="st">«component»</text><text x="980" y="346" text-anchor="middle" class="name">Admin Service</text>
+  <rect x="875" y="475" width="210" height="88" rx="5" class="external"/><text x="980" y="508" text-anchor="middle" class="st">«external adapter»</text><text x="980" y="536" text-anchor="middle" class="name">Payment Simulator</text>
+  <path d="M760 183 L220 285" class="dep"/><path d="M790 183 L490 285" class="dep"/><path d="M830 183 L745 285" class="dep"/><path d="M870 183 L960 285" class="dep"/>
+  <path d="M820 329 L920 475" class="dep"/><text x="860" y="410" class="edge">authorize / refund</text>
+
+  <rect x="250" y="610" width="570" height="88" rx="5" class="data"/><text x="535" y="644" text-anchor="middle" class="st">«database»</text><text x="535" y="673" text-anchor="middle" class="name">Relational Database</text>
+  <path d="M185 373 L350 610" class="dep"/><path d="M450 373 L480 610" class="dep"/><path d="M715 373 L650 610" class="dep"/><path d="M980 373 L760 610" class="dep"/>
+  <text x="95" y="730" class="st">Dashed arrows denote required interfaces/dependencies; database access is private to server-side components.</text>
+</svg>
+

@@ -10,3 +10,25 @@ Software Engineering Mini Project — Part 1, Team E15.
 4. [Test Case Update — Muhammad Affan Dumba](04_Test_Case_Update_Muhammad_Affan_Dumba_PES1UG24CS280.pdf)
 
 The Test Case Update is also incorporated into §5.2 of the Test Plan, as required by the assignment.
+
+## Running the application
+
+Sprint 1 scope only: registration, login, train search, booking, booking history (FR-01–06, FR-09,
+SEC-02–03). Cancellation, admin, and the remaining NFRs are Sprint 2.
+
+```bash
+docker compose up -d                 # starts Postgres on localhost:5432
+
+cd backend
+cp .env.example .env
+npm install
+npm run migrate                      # creates tables + seeds one demo trip
+npm run dev                          # http://localhost:3000
+
+cd ../frontend
+npm install
+npm run dev                          # http://localhost:5173 (proxies /api to the backend)
+```
+
+Run the backend test suite with `npm test` inside `backend/` (needs Postgres running, see above).
+

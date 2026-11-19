@@ -1,34 +1,174 @@
+:root {
+  color-scheme: light;
+  --ink: #1a1a1a;
+  --muted: #5b6570;
+  --line: #ccd2d8;
+  --accent: #0b5ed7;
+  --ok: #106b3e;
+  --bad: #b00020;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: system-ui, sans-serif;
-  max-width: 640px;
+  max-width: 960px;
   margin: 2rem auto;
   padding: 0 1rem;
-  color: #1a1a1a;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.5rem;
 }
 
 nav a {
-  margin-right: 1rem;
+  color: var(--accent);
+}
+
+.nav-user {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* NFR-05: visible keyboard focus everywhere. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #f0a000;
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: #fff;
+  padding: 0.5rem 0.75rem;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  left: 0.5rem;
 }
 
 form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-width: 320px;
+  max-width: 360px;
+}
+
+form.grid-form {
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.5rem 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+.grid-form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+input,
+button {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.inline-number {
+  width: 5.5rem;
+  margin-right: 0.4rem;
 }
 
 .error {
-  color: #b00020;
+  color: var(--bad);
+  font-weight: 600;
+}
+
+.success {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.subtle {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* NFR-06: wide tables scroll inside their own box instead of the page. */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 560px;
 }
 
 th,
 td {
-  border: 1px solid #ccc;
+  border: 1px solid var(--line);
   padding: 0.4rem 0.6rem;
   text-align: left;
+}
+
+thead th {
+  background: #f4f6f8;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 420px) {
+  body {
+    margin: 1rem auto;
+    padding: 0 0.75rem;
+  }
+
+  form,
+  form.grid-form {
+    max-width: 100%;
+  }
+
+  nav {
+    gap: 0.5rem;
+  }
 }

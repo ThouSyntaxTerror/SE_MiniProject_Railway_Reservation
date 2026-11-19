@@ -147,3 +147,91 @@ describe('concurrent final seat (NFR-03)', () => {
     expect(availability.body.unreserved).toBe(0);
   });
 });
+
+describe('administrator validation (FR-08)', () => {
+  test('invalid or missing trip ids return 404, not a database error', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const badPatch = await request(app)
+      .patch('/api/admin/trips/not-a-number')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ fare: 10 });
+    const negative = await request(app)
+      .delete('/api/admin/trips/-1')
+      .set('Authorization', `Bearer ${token}`);
+    const missing = await request(app)
+      .patch('/api/admin/trips/999999')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ fare: 10 });
+    expect(badPatch.status).toBe(404);
+    expect(negative.status).toBe(404);
+    expect(missing.status).toBe(404);
+  });
+
+  test.each([
+    [{ capacity: 0 }, 'capacity must be positive'],
+    [{ capacity: 1.5 }, 'capacity must be an integer'],
+    [{ fare: -1 }, 'fare must be non-negative'],
+    [{ fare: 'abc' }, 'fare must be numeric'],
+    [{ train_number: '   ' }, 'train number must be non-empty'],
+    [{ departure_utc: 'not-a-date' }, 'departure must be a timestamp'],
+  ])('rejects an invalid create payload %#', async (override) => {
+    const token = await seedUser({ role: 'admin' });
+    const res = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ...TRIP, ...override });
+    expect(res.status).toBe(400);
+    expect(res.body.code).toBe('VALIDATION_ERROR');
+  });
+
+  test('rejects arrival before departure', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const res = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ...TRIP, arrival_utc: future(1) });
+    expect(res.status).toBe(400);
+  });
+
+  test('a partial patch is validated against the stored trip', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const created = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send(TRIP);
+    const res = await request(app)
+      .patch(`/api/admin/trips/${created.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ departure_utc: future(3) }); // now after the stored arrival
+    expect(res.status).toBe(400);
+  });
+
+  test('a patch with no updatable fields is rejected', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const created = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send(TRIP);
+    const res = await request(app)
+      .patch(`/api/admin/trips/${created.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({});
+    expect(res.status).toBe(400);
+  });
+
+  test('disabling a trip writes its audit event in the same operation', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const created = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send(TRIP);
+    await request(app)
+      .delete(`/api/admin/trips/${created.body.id}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    const { rows } = await pool.query(
+      "SELECT outcome FROM audit_events WHERE action = 'admin_trip_disable'"
+    );
+    expect(rows).toEqual([{ outcome: 'success' }]);
+  });
+});

@@ -33,7 +33,7 @@ Every SRS identifier → implementation → test → status. Suite: 55 automated
 |---|---|---|---|
 | SEC-01 | `requireRole('admin')`, ownership check in `cancel`, passenger-scoped history | `admin.test.js`, `booking.test.js`, `security.test.js` | Met |
 | SEC-02 | bcryptjs adaptive salted hash (12 rounds), no password in response/audit | `auth.test.js`, `security.test.js` | Met |
-| SEC-03 | 30-minute sliding session, delete on sign-out, Caddy TLS config | `security.test.js`, `docs/HTTPS_DEPLOYMENT.md` | Met (HTTPS verified in demo) |
+| SEC-03 | 30-minute sliding session, delete on sign-out, Caddy TLS config | `security.test.js`, `docs/HTTPS_DEPLOYMENT.md` | Implemented; manual HTTPS verification pending (TC-09) |
 | SEC-04 | `failed_attempts`, `locked_until`, 429, audit without password | `auth.test.js` lockout group | Met |
 
 ## Test Plan §5.2 coverage

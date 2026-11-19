@@ -6,7 +6,7 @@ const paymentSimulator = require('../src/paymentSimulator');
 const app = createApp();
 
 async function registerAndLogin(email) {
-  const payload = { email, password: 'correctpassword123' };
+  const payload = { name: 'Test User', email, password: 'correctpassword123' };
   await request(app).post('/api/register').send(payload);
   const res = await request(app).post('/api/sessions').send(payload);
   return res.body.token;

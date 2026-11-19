@@ -3,6 +3,7 @@ const { requestId, errorHandler } = require('./middleware/errors');
 const authRoutes = require('./routes/auth');
 const tripRoutes = require('./routes/trips');
 const bookingRoutes = require('./routes/bookings');
+const adminRoutes = require('./routes/admin');
 
 function createApp() {
   const app = express();
@@ -14,6 +15,7 @@ function createApp() {
   app.use('/api', authRoutes);
   app.use('/api/trips', tripRoutes);
   app.use('/api/bookings', bookingRoutes);
+  app.use('/api/admin', adminRoutes);
 
   app.use((req, res) => res.status(404).json({ code: 'NOT_FOUND', message: 'Not found.', requestId: req.requestId }));
   app.use(errorHandler);

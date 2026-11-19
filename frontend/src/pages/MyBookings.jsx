@@ -35,15 +35,17 @@ export default function MyBookings() {
       {notice && <p role="status">{notice}</p>}
       {bookings.length === 0 && !error && <p>No bookings yet.</p>}
       {bookings.length > 0 && (
+        <div className="table-wrap">
         <table>
+          <caption className="sr-only">Your bookings</caption>
           <thead>
             <tr>
-              <th>PNR</th>
-              <th>Train</th>
-              <th>Seat</th>
-              <th>Fare</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th scope="col">PNR</th>
+              <th scope="col">Train</th>
+              <th scope="col">Seat</th>
+              <th scope="col">Fare</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +69,7 @@ export default function MyBookings() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

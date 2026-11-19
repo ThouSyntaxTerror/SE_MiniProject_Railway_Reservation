@@ -14,13 +14,22 @@ async function resetDb() {
   );
 }
 
-async function seedTrip({ capacity = 2, origin = 'Bengaluru', destination = 'Chennai', daysAhead = 1 } = {}) {
+// `daysAhead` is the common case; `departsIn` accepts any Postgres interval string (e.g. '-1 day')
+// for departure-time tests.
+async function seedTrip({
+  capacity = 2,
+  origin = 'Bengaluru',
+  destination = 'Chennai',
+  daysAhead = 1,
+  departsIn = null,
+} = {}) {
+  const interval = departsIn === null ? `${daysAhead} days` : String(departsIn);
   const { rows } = await pool.query(
     `INSERT INTO trips (train_number, origin, destination, departure_utc, arrival_utc, fare, capacity)
-     VALUES ('T1', $1, $2, now() + ($3 || ' days')::interval,
-             now() + ($3 || ' days')::interval + interval '6 hours', 500.00, $4)
+     VALUES ('T1', $2, $3, now() + $4::interval,
+             now() + $4::interval + interval '6 hours', 500.00, $1)
      RETURNING id`,
-    [origin, destination, daysAhead, capacity]
+    [capacity, origin, destination, interval]
   );
   const tripId = rows[0].id;
   for (let seatNumber = 1; seatNumber <= capacity; seatNumber++) {

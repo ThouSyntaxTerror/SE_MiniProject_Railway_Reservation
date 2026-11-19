@@ -21,7 +21,7 @@ Merge order: foundation → admin → cancellation → passenger → security �
 green CI run and one approving review from a member other than the author; the repository owner
 merges.
 
-Sprint 1 output: 49 automated tests on the merged stack, all passing; registration/name, search, booking, cancellation,
+Sprint 1 output: 55 automated tests on the merged stack, all passing; registration/name, search, booking, cancellation,
 admin and audit working end to end.
 
 ## Sprint 2 — prove it (19 Nov 2026)

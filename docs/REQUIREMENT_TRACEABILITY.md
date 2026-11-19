@@ -1,6 +1,6 @@
 # Requirement traceability — Team E15
 
-Every SRS identifier → implementation → test → status. Suite: 49 automated tests on the merged stack, all passing.
+Every SRS identifier → implementation → test → status. Suite: 55 automated tests on the merged stack, all passing.
 
 ## Functional requirements
 

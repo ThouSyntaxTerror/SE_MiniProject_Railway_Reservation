@@ -54,7 +54,7 @@ Demo accounts created by `npm run migrate`:
 
 ```bash
 cd backend
-npm test                             # 49 Jest/Supertest tests, real Postgres
+npm test                             # 55 Jest/Supertest tests, real Postgres
 npm run seed:perf                    # 10,000 trips for NFR-01
 npm run test:load -- --base http://localhost:3000
 ./scripts/recoveryCheck.sh http://localhost:3000   # NFR-04 restart evidence

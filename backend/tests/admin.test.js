@@ -67,8 +67,10 @@ describe('administration (FR-08, SEC-01)', () => {
       .set('Authorization', `Bearer ${token}`);
     expect(disabled.status).toBe(204);
 
-    const after = await request(app).get(`/api/trips/${tripId}/availability`);
-    expect(after.body.enabled).toBe(false);
+    const search = await request(app)
+      .get('/api/trips')
+      .query({ origin: TRIP.origin, destination: TRIP.destination, date: TRIP.departure_utc.slice(0, 10) });
+    expect(search.body.some((trip) => trip.id === tripId)).toBe(false);
   });
 
   test('a capacity below a confirmed seat is rejected', async () => {

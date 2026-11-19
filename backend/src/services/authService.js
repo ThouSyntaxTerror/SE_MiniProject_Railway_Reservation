@@ -5,7 +5,7 @@ const auditService = require('./auditService');
 const { AppError } = require('../middleware/errors');
 
 const SESSION_TTL_MS = 30 * 60 * 1000; // SEC-03: 30 min inactivity expiry
-const BCRYPT_ROUNDS = 12;
+const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS || 12);
 
 // FR-01: unique email, name, password >= 12 chars. Rejects an 11-char password or duplicate
 // email without creating an account.

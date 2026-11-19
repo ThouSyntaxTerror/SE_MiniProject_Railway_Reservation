@@ -22,6 +22,15 @@ describe('registration (FR-01)', () => {
     expect(res.body.password_hash).toBeUndefined();
   });
 
+  test('trims surrounding whitespace from the registered name', async () => {
+    const res = await request(app).post('/api/register').send({ ...VALID, name: '  Asha Rao  ' });
+
+    expect(res.status).toBe(201);
+    expect(res.body.name).toBe('Asha Rao');
+    const { rows } = await pool.query('SELECT name FROM users WHERE email = $1', [VALID.email]);
+    expect(rows[0].name).toBe('Asha Rao');
+  });
+
   test('rejects a missing name', async () => {
     const res = await request(app).post('/api/register').send({ email: VALID.email, password: VALID.password });
     expect(res.status).toBe(400);
@@ -42,6 +51,18 @@ describe('registration (FR-01)', () => {
     await request(app).post('/api/register').send(VALID);
     const res = await request(app).post('/api/register').send(VALID);
     expect(res.status).toBe(409);
+    const { rows } = await pool.query('SELECT count(*)::int AS c FROM users WHERE email = $1', [VALID.email]);
+    expect(rows[0].c).toBe(1);
+  });
+
+  test('rejects a duplicate email when case and surrounding whitespace differ', async () => {
+    await request(app).post('/api/register').send(VALID);
+    const res = await request(app)
+      .post('/api/register')
+      .send({ ...VALID, name: 'Another Name', email: '  ASHA@EXAMPLE.COM  ' });
+
+    expect(res.status).toBe(409);
+    expect(res.body.code).toBe('EMAIL_TAKEN');
     const { rows } = await pool.query('SELECT count(*)::int AS c FROM users WHERE email = $1', [VALID.email]);
     expect(rows[0].c).toBe(1);
   });

@@ -19,7 +19,7 @@ actually run; the automated suite is executed by GitHub Actions on every pull re
 | TC-07 Administrator inventory and audit | FR-08, FR-09, SEC-01 | **PASS** | `admin.test.js` — passenger 403; admin create/edit/disable persists; audit has actor, time, action, outcome |
 | TC-08 Concurrent final seat | FR-04, FR-05, NFR-03 | **PASS** | `admin.test.js` — 20 simultaneous bookings → exactly 1 confirmed, 19 × 409, unreserved 0 |
 | TC-09 Security, session and restart | FR-09, SEC-02, SEC-03, NFR-04 | **PARTIAL — automated part PASS; HTTPS PENDING** | `security.test.js` (expiry, sign-out replay, malformed token, no plaintext) + restart run below. HTTPS is configured but has **not** been exercised on a deployed instance yet |
-| TC-10 Performance, accessibility, compatibility | NFR-01, NFR-02, NFR-05, NFR-06 | **PARTIAL — NFR-01/02 PASS; NFR-05/06 NOT YET VERIFIED** | Load run below. Labels, focus styles and responsive CSS are implemented, but no named teammate has yet performed the keyboard and 3-browser × 2-viewport matrix |
+| TC-10 Performance, accessibility, compatibility | NFR-01, NFR-02, NFR-05, NFR-06 | **PASS (NFR-05/06 headless, one machine)** | Load run below. Keyboard workflow and 3-browser × 2-viewport matrix executed by Affan; one defect (D-07, My bookings overflow at 375 px) fixed and re-run clean. Not covered: real screen reader, physical phone, admin pages |
 
 ## Measured non-functional results
 
@@ -50,7 +50,7 @@ No critical or high defect remains open.
 The automated suite covers every functional invariant above. The following are manual by nature;
 they are **not claimed as passed** until the named owner performs them and records the result:
 
-- [ ] Chrome, Edge, Firefox at 375 px and 1280 px: no horizontal scroll of primary forms (Affan)
-- [ ] Keyboard-only registration → search → booking → cancel (Affan)
+- [x] Chrome 157, Edge 157, Firefox 160 at 375 px and 1280 px: no horizontal scroll (Affan; automated-driven, headless; defect D-07 on My bookings found and fixed; see `docs/evidence/nfr05-nfr06/RESULTS.md`)
+- [x] Keyboard-only registration → search → booking → cancel (Affan; 23/23 steps in all three browsers; see `docs/evidence/nfr05-nfr06/RESULTS.md`)
 - [ ] DevTools shows `https` for `/api` requests under Caddy (Atharv)
 - [ ] 30-minute idle expiry observed on the deployed instance (Atharv)

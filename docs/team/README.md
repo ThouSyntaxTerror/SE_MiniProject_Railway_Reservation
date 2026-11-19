@@ -21,7 +21,7 @@ merge your own PR; the repository owner merges after CI is green and the review 
 | #24 admin | Rizwan | Mohit |
 | #25 availability | Rizwan | Atharv |
 | passenger | Mohit | Affan |
-| cancellation | Affan | Mohit |
+| #22 cancellation | Affan | Mohit |
 | security/recovery | Atharv | Rizwan |
 
 ## Common commands

@@ -13,7 +13,7 @@ Goal: make the Sprint 1 scaffold satisfy FR-01–FR-09, SEC-01–SEC-04.
 | `chore/sprint2-foundation` | Rizwan | schema, seeds, test harness, bcryptjs | [#23](https://github.com/ThouSyntaxTerror/SE_MiniProject_Railway_Reservation/pull/23) |
 | `feat/fr08-admin` | Rizwan | FR-08 admin CRUD + audit view, FR-09 read API | [#24](https://github.com/ThouSyntaxTerror/SE_MiniProject_Railway_Reservation/pull/24) |
 | `feat/fr01-fr03-passenger` | Mohit | FR-01 name, FR-02/03 search, FR-06 history | see Pull requests |
-| `feat/fr05-fr07-cancellation` | Affan | FR-05 hardening, FR-07 cancellation, SEC-04 lockout | see Pull requests |
+| `affan/issue-10-booking-cancellation` | Affan | FR-05 hardening, FR-07 cancellation, SEC-04 lockout | [#22](https://github.com/ThouSyntaxTerror/SE_MiniProject_Railway_Reservation/pull/22) |
 | `test/security-recovery` | Atharv | SEC-01/02/03 tests, HTTPS config, NFR-04 helper | see Pull requests |
 | `test/fr04-availability` | Rizwan | FR-04 bounds and disabled-trip tests | [#25](https://github.com/ThouSyntaxTerror/SE_MiniProject_Railway_Reservation/pull/25) |
 

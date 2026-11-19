@@ -12,20 +12,25 @@ async function migrate() {
 }
 
 // Seeded identities make the demo and the Part 2 videos reproducible.
-// Override the admin credentials with ADMIN_EMAIL / ADMIN_PASSWORD in backend/.env.
+// Override the demo credentials with ADMIN_EMAIL / ADMIN_PASSWORD in backend/.env.
+//
+// SECURITY: this NEVER promotes an existing account. If an account already owns the configured
+// admin email it is left exactly as it is (role included); provisioning an administrator is an
+// explicit operator action, not a migration side effect.
 async function seedDemoData() {
+  const rounds = Number(process.env.BCRYPT_ROUNDS || 12);
   const adminEmail = (process.env.ADMIN_EMAIL || 'admin@rrs.test').toLowerCase();
   const adminPassword = process.env.ADMIN_PASSWORD || 'AdminPassword123';
-  const adminHash = await bcrypt.hash(adminPassword, 12);
+  const adminHash = await bcrypt.hash(adminPassword, rounds);
   await pool.query(
     `INSERT INTO users (name, email, password_hash, role)
      VALUES ('RRS Administrator', $1, $2, 'admin')
-     ON CONFLICT (email) DO UPDATE SET role = 'admin'`,
+     ON CONFLICT (email) DO NOTHING`,
     [adminEmail, adminHash]
   );
 
   const passengerEmail = 'passenger@rrs.test';
-  const passengerHash = await bcrypt.hash('PassengerPass123', 12);
+  const passengerHash = await bcrypt.hash('PassengerPass123', rounds);
   await pool.query(
     `INSERT INTO users (name, email, password_hash, role)
      VALUES ('Demo Passenger', $1, $2, 'passenger')
@@ -51,7 +56,11 @@ async function seedDemoData() {
   }
 }
 
-migrate().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  migrate().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+module.exports = { migrate, seedDemoData };

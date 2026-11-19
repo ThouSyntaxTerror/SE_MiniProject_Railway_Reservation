@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const pool = require('../src/db/pool');
 
 async function resetDb() {
@@ -12,12 +14,13 @@ async function resetDb() {
   );
 }
 
-async function seedTrip({ capacity = 2 } = {}) {
+async function seedTrip({ capacity = 2, origin = 'Bengaluru', destination = 'Chennai', daysAhead = 1 } = {}) {
   const { rows } = await pool.query(
     `INSERT INTO trips (train_number, origin, destination, departure_utc, arrival_utc, fare, capacity)
-     VALUES ('T1', 'Bengaluru', 'Chennai', now() + interval '1 day', now() + interval '1 day 6 hours', 500.00, $1)
+     VALUES ('T1', $1, $2, now() + ($3 || ' days')::interval,
+             now() + ($3 || ' days')::interval + interval '6 hours', 500.00, $4)
      RETURNING id`,
-    [capacity]
+    [origin, destination, daysAhead, capacity]
   );
   const tripId = rows[0].id;
   for (let seatNumber = 1; seatNumber <= capacity; seatNumber++) {
@@ -26,4 +29,24 @@ async function seedTrip({ capacity = 2 } = {}) {
   return tripId;
 }
 
-module.exports = { pool, resetDb, seedTrip };
+// Creates a user directly (so tests can choose the role) and returns a live session token.
+async function seedUser({
+  role = 'passenger',
+  email = `user-${crypto.randomBytes(4).toString('hex')}@example.com`,
+  password = 'correctpassword123',
+  name = 'Test User',
+} = {}) {
+  const passwordHash = await bcrypt.hash(password, 4);
+  const { rows } = await pool.query(
+    'INSERT INTO users (name, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id',
+    [name, email, passwordHash, role]
+  );
+  const token = crypto.randomBytes(32).toString('hex');
+  await pool.query(
+    "INSERT INTO sessions (token, user_id, expires_at) VALUES ($1, $2, now() + interval '30 minutes')",
+    [token, rows[0].id]
+  );
+  return token;
+}
+
+module.exports = { pool, resetDb, seedTrip, seedUser };

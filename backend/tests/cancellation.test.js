@@ -135,6 +135,41 @@ describe('cancellation (FR-07, SEC-01)', () => {
     expect(res.body.refundStatus).toBe('failed');
     const { rows } = await pool.query("SELECT status FROM payment_events WHERE kind = 'refund'");
     expect(rows[0].status).toBe('failed');
+
+    // The booking stays cancelled despite the refund failure (design doc: refund failure never
+    // restores the booking)...
+    const stored = await pool.query('SELECT status FROM bookings WHERE id = $1', [booking.id]);
+    expect(stored.rows[0].status).toBe('cancelled');
+    // ...and, per policy, the seat is released: it is not confirmed and can be booked again.
+    const confirmed = await pool.query("SELECT count(*)::int AS c FROM bookings WHERE status = 'confirmed'");
+    expect(confirmed.rows[0].c).toBe(0);
+    const other = await registerAndLogin('afterfail@example.com');
+    const rebook = await request(app)
+      .post('/api/bookings')
+      .set('Authorization', `Bearer ${other}`)
+      .set('Idempotency-Key', 'af-1')
+      .send({ tripId });
+    expect(rebook.status).toBe(201);
+  });
+
+  test('two concurrent cancellations: exactly one succeeds, one refund, the other is already-cancelled', async () => {
+    const tripId = await seedTrip({ capacity: 1 });
+    const token = await registerAndLogin('race@example.com');
+    const booking = await bookSeat(token, tripId, 'race-1');
+
+    const [a, b] = await Promise.all([cancel(token, booking.id), cancel(token, booking.id)]);
+
+    const statuses = [a.status, b.status].sort();
+    expect(statuses).toEqual([200, 409]);
+    const loser = a.status === 409 ? a : b;
+    expect(loser.body.code).toBe('ALREADY_CANCELLED');
+    const refunds = await pool.query(
+      "SELECT count(*)::int AS c FROM payment_events WHERE kind = 'refund' AND booking_id = $1",
+      [booking.id]
+    );
+    expect(refunds.rows[0].c).toBe(1);
+    const stored = await pool.query('SELECT status FROM bookings WHERE id = $1', [booking.id]);
+    expect(stored.rows[0].status).toBe('cancelled');
   });
 
   test('every cancellation outcome is audited', async () => {

@@ -9,9 +9,9 @@
 
 ```bash
 git fetch origin
-git checkout chore/sprint2-foundation && npm --prefix backend test
-git checkout feat/fr08-admin           && npm --prefix backend test   # 15 passed
-git checkout test/fr04-availability    && npm --prefix backend test   # 12 passed
+git checkout chore/sprint2-foundation && npm --prefix backend test   # 11 passed
+git checkout feat/fr08-admin           && npm --prefix backend test   # 28 passed
+git checkout test/fr04-availability    && npm --prefix backend test   # 14 passed
 npm --prefix frontend run build
 ```
 

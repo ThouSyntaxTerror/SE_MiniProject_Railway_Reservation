@@ -12,7 +12,7 @@
 git fetch origin
 git checkout feat/fr05-fr07-cancellation
 git pull
-cd backend && npm install && npm test          # expect 14 passed
+cd backend && npm install && npm test          # expect 16 passed
 cd ../frontend && npm install && npm run build # expect success
 ```
 
@@ -42,7 +42,7 @@ Body:
 - UI: Cancel action with refund reference.
 
 ## Verification
-- `cd backend && npm test` → 14 passed.
+- `cd backend && npm test` → 16 passed.
 - Manual: owner cancel shows `REF-…`; second cancel shows `alreadyCancelled: true`; seat count unchanged.
 
 Closes #10 #13

@@ -3,7 +3,7 @@
 Build under test: Sprint 2 integration (`feat/fr08-admin` + `feat/fr01-fr03-passenger` +
 `feat/fr05-fr07-cancellation` + `test/security-recovery` + `test/fr04-availability`).
 Environment: Node 22 (CI) / Node 26 (local), PostgreSQL 16, Chrome/Edge/Firefox (manual checks),
-19 November 2026. Suite: `cd backend && npm test` — **36 tests, 36 passed, 6 suites**.
+19 November 2026. Merged stack: `cd backend && npm test` — **49 tests, 49 passed, 7 suites** (verified on `integration/final`). This documents-only PR runs the foundation subset until the code PRs merge.
 
 The cases below are the ten specifications from Test Plan §5.2. "Executed" records what was
 actually run; the automated suite is executed by GitHub Actions on every pull request.
@@ -18,8 +18,8 @@ actually run; the automated suite is executed by GitHub Actions on every pull re
 | TC-06 Booking ownership and cancellation | FR-06, FR-07, SEC-01 | **PASS** | `booking.test.js` — non-owner 404 without PNR; owner cancel returns `REF-…`; repeat cancel releases no second seat |
 | TC-07 Administrator inventory and audit | FR-08, FR-09, SEC-01 | **PASS** | `admin.test.js` — passenger 403; admin create/edit/disable persists; audit has actor, time, action, outcome |
 | TC-08 Concurrent final seat | FR-04, FR-05, NFR-03 | **PASS** | `admin.test.js` — 20 simultaneous bookings → exactly 1 confirmed, 19 × 409, unreserved 0 |
-| TC-09 Security, session and restart | FR-09, SEC-02, SEC-03, NFR-04 | **PASS** | `security.test.js` (expiry, sign-out replay, malformed token, no plaintext) + HTTPS config + restart run below |
-| TC-10 Performance, accessibility, compatibility | NFR-01, NFR-02, NFR-05, NFR-06 | **PASS (perf)** / **MANUAL (a11y, compat)** | Load run below; labels/focus/responsive CSS present; 3-browser × 2-viewport pass documented in the demo checklist |
+| TC-09 Security, session and restart | FR-09, SEC-02, SEC-03, NFR-04 | **PARTIAL — automated part PASS; HTTPS PENDING** | `security.test.js` (expiry, sign-out replay, malformed token, no plaintext) + restart run below. HTTPS is configured but has **not** been exercised on a deployed instance yet |
+| TC-10 Performance, accessibility, compatibility | NFR-01, NFR-02, NFR-05, NFR-06 | **PARTIAL — NFR-01/02 PASS; NFR-05/06 NOT YET VERIFIED** | Load run below. Labels, focus styles and responsive CSS are implemented, but no named teammate has yet performed the keyboard and 3-browser × 2-viewport matrix |
 
 ## Measured non-functional results
 
@@ -45,10 +45,10 @@ Executed 19 November 2026 against the seeded database (10,000 trips).
 
 No critical or high defect remains open.
 
-## Manual checks still to be signed off
+## Manual checks — not yet verified
 
-The automated suite covers every functional invariant above. The following are manual by nature
-and must be ticked by the named owner during the demo:
+The automated suite covers every functional invariant above. The following are manual by nature;
+they are **not claimed as passed** until the named owner performs them and records the result:
 
 - [ ] Chrome, Edge, Firefox at 375 px and 1280 px: no horizontal scroll of primary forms (Affan)
 - [ ] Keyboard-only registration → search → booking → cancel (Affan)

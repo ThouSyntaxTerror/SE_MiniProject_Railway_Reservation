@@ -13,7 +13,7 @@
 git fetch origin
 git checkout feat/fr01-fr03-passenger
 git pull
-cd backend && npm install && npm test          # expect 22 passed (includes cancellation tests)
+cd backend && npm install && npm test          # expect 24 passed (includes cancellation tests)
 cd ../frontend && npm install && npm run build # expect success
 ```
 
@@ -41,7 +41,7 @@ Body:
 - UI: name field, seat counts, sold-out state, booking feedback.
 
 ## Verification
-- `cd backend && npm test` → 22 passed.
+- `cd backend && npm test` → 24 passed.
 - `cd frontend && npm run build` → success.
 
 Closes #1

@@ -21,7 +21,7 @@ Merge order: foundation → admin → cancellation → passenger → security �
 green CI run and one approving review from a member other than the author; the repository owner
 merges.
 
-Sprint 1 output: 36 automated tests, all passing; registration/name, search, booking, cancellation,
+Sprint 1 output: 49 automated tests on the merged stack, all passing; registration/name, search, booking, cancellation,
 admin and audit working end to end.
 
 ## Sprint 2 — prove it (19 Nov 2026)
@@ -34,7 +34,7 @@ Goal: execute all ten TCs, measure the NFRs, record evidence, freeze.
 | TC-02/06 (lockout, cancellation) sign-off | Affan | `TEST_EXECUTION_REPORT.md` |
 | TC-09/10 session, HTTPS, recovery, compatibility | Atharv | `security.test.js`, `HTTPS_DEPLOYMENT.md` |
 | NFR-01/02 load run, NFR-03 race | Rizwan | p95 301 ms / 456 ms, 1 of 20 confirmed |
-| Documentation freeze | all | README, RTM, report, deviations, videos |
+| Documentation freeze | all | README, RTM, report, deviations (videos still to be recorded) |
 
 ## Evidence pointers
 
@@ -42,5 +42,5 @@ Goal: execute all ten TCs, measure the NFRs, record evidence, freeze.
 - Test report: [TEST_EXECUTION_REPORT.md](TEST_EXECUTION_REPORT.md)
 - Traceability: [REQUIREMENT_TRACEABILITY.md](REQUIREMENT_TRACEABILITY.md)
 - Backlog and points: [GITHUB_PROJECT_BACKLOG.md](GITHUB_PROJECT_BACKLOG.md)
-- Videos: `docs/media/sprint1-demo.mp4`, `docs/media/sprint2-demo.mp4` (recorded from the merged
-  `main`; scripts in [DEMO_SCRIPT.md](DEMO_SCRIPT.md)).
+- Videos: **not yet recorded or committed.** Scripts are in [DEMO_SCRIPT.md](DEMO_SCRIPT.md);
+  the intended paths are `docs/media/sprint1-demo.mp4` and `docs/media/sprint2-demo.mp4`.

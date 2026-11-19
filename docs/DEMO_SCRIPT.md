@@ -33,7 +33,7 @@ Accounts: `admin@rrs.test / AdminPassword123`, `passenger@rrs.test / PassengerPa
 | 1:10–1:20 | Scroll the audit table | "Every sign-in, booking, cancellation and admin change is audited with actor, time and outcome." |
 | 1:20–1:32 | Sign out; sign in with 5 wrong passwords; show the lockout message | "Five failures lock the account for 15 minutes; the audit row never stores the password." |
 | 1:32–1:45 | Show `https://rrs.localhost` in the address bar and an `/api` request in DevTools | "TLS terminates at the proxy; authenticated traffic is HTTPS." |
-| 1:45–1:55 | Show the Actions tab / test report | "36 automated tests, ten TCs executed; p95 search 301 ms, booking 456 ms." |
+| 1:45–1:55 | Show the Actions tab / test report | "49 automated tests, ten TCs executed; p95 search 301 ms, booking 456 ms." |
 | 1:55–2:00 | Show the PR list and the Project board | "Four members, reviewed PRs, two sprints." |
 
 ## Upload

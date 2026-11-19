@@ -1,7 +1,8 @@
 # Mohit — FR-01/02/03/06 (SRS owner)
 
-> This branch is stacked on `feat/fr05-fr07-cancellation`, so open the PR **after** that one is
-> merged. It keeps the booking tests and the audit test from PR #21 intact.
+> This branch is stacked on Affan's cancellation PR #22 and the foundation. Open the PR after
+> #22 and #23 merge; then the diff is only the passenger files. The Rizwan scaffold covers the
+> requirements; your contribution is the edge-case coverage, verification and the PR itself.
 
 **Branch:** `feat/fr01-fr03-passenger`
 **Issues:** #1 (FR-01), #3 (FR-03); refs #2, #4, #13
@@ -13,7 +14,7 @@
 git fetch origin
 git checkout feat/fr01-fr03-passenger
 git pull
-cd backend && npm install && npm test          # expect 24 passed (includes cancellation tests)
+cd backend && npm install && npm test          # expect 27 passed before your new tests
 cd ../frontend && npm install && npm run build # expect success
 ```
 
@@ -41,7 +42,7 @@ Body:
 - UI: name field, seat counts, sold-out state, booking feedback.
 
 ## Verification
-- `cd backend && npm test` → 24 passed.
+- `cd backend && npm test` → 30 passed after adding the three edge-case tests.
 - `cd frontend && npm run build` → success.
 
 Closes #1

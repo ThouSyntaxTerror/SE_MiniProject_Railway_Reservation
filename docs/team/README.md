@@ -7,8 +7,8 @@ merge your own PR; the repository owner merges after CI is green and the review 
 
 1. `chore/sprint2-foundation` — PR #23 (Rizwan)
 2. `feat/fr08-admin` — PR #24 (Rizwan)
-3. `feat/fr05-fr07-cancellation` (Affan)
-4. `feat/fr01-fr03-passenger` (Mohit) — stacked on the cancellation branch
+3. Affan's cancellation PR #22
+4. `feat/fr01-fr03-passenger` (Mohit) — stacked on #22 + the foundation
 5. `test/security-recovery` (Atharv) — open **after** step 2; its 403 test needs the admin route
 6. `test/fr04-availability` — PR #25 (Rizwan)
 7. `docs/sprint2-report` — PR #26 (Rizwan) — merge last so CI runs against the full code

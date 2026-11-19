@@ -1,11 +1,16 @@
 // Deterministic payment adapter per architecture doc §2.1 — isolates passenger workflows from
 // whatever a real gateway would be, in or out of process. Tests flip `forceFailure` to exercise
-// the failure path (FR-05: failed payment releases the hold and creates no confirmed booking).
+// the failure path (FR-05) and can flip `forceRefundFailure` for cancellation visibility (FR-07).
 
 let forceFailure = false;
+let forceRefundFailure = false;
 
 function setForceFailure(value) {
   forceFailure = value;
+}
+
+function setForceRefundFailure(value) {
+  forceRefundFailure = value;
 }
 
 function authorize(transactionRef) {
@@ -15,4 +20,9 @@ function authorize(transactionRef) {
   return { status: 'success', reference: transactionRef };
 }
 
-module.exports = { authorize, setForceFailure };
+function refund(transactionRef) {
+  const reference = `REF-${transactionRef}`;
+  return { status: forceRefundFailure ? 'failed' : 'success', reference };
+}
+
+module.exports = { authorize, refund, setForceFailure, setForceRefundFailure };

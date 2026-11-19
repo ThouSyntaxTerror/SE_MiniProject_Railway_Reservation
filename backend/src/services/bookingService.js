@@ -119,4 +119,70 @@ async function listForUser(userId) {
   return rows;
 }
 
-module.exports = { book, listForUser };
+// FR-07: cancel an eligible booking exactly once. The row is locked, ownership/state/departure are
+// checked, then status flips to 'cancelled' — which frees the seat because the partial unique index
+// only constrains confirmed bookings. A refund failure is recorded but never restores the booking.
+async function cancel({ userId, bookingId, requestId }) {
+  const id = Number(bookingId);
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new AppError(404, 'NOT_FOUND', 'Booking not found.');
+  }
+  const client = await pool.connect();
+  let committed = false;
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      `SELECT b.id, b.pnr, b.user_id, b.status, (t.departure_utc <= now()) AS departed
+       FROM bookings b
+       JOIN trips t ON t.id = b.trip_id
+       WHERE b.id = $1
+       FOR UPDATE OF b`,
+      [id]
+    );
+    const booking = rows[0];
+
+    // Non-owners get the same 404 as a missing booking so booking ids can't be probed (SEC-01).
+    if (!booking || booking.user_id !== userId) {
+      await auditService.record(client, { actorId: userId, action: 'cancellation', outcome: 'not_owner', requestId });
+      await client.query('COMMIT');
+      committed = true;
+      throw new AppError(404, 'NOT_FOUND', 'Booking not found.');
+    }
+    if (booking.status !== 'confirmed') {
+      await auditService.record(client, { actorId: userId, action: 'cancellation', outcome: 'already_cancelled', requestId });
+      await client.query('COMMIT');
+      committed = true;
+      throw new AppError(409, 'ALREADY_CANCELLED', 'Booking is not confirmed and cannot be cancelled.');
+    }
+    if (booking.departed) {
+      await auditService.record(client, { actorId: userId, action: 'cancellation', outcome: 'too_late', requestId });
+      await client.query('COMMIT');
+      committed = true;
+      throw new AppError(409, 'CANCELLATION_TOO_LATE', 'The train has already departed; cancellation is not allowed.');
+    }
+
+    await client.query("UPDATE bookings SET status = 'cancelled' WHERE id = $1", [id]);
+    const refund = paymentSimulator.refund(booking.pnr);
+    await client.query(
+      'INSERT INTO payment_events (booking_id, kind, status, reference) VALUES ($1, $2, $3, $4)',
+      [id, 'refund', refund.status, refund.reference]
+    );
+    await auditService.record(client, { actorId: userId, action: 'cancellation', outcome: 'cancelled', requestId });
+    await client.query('COMMIT');
+    committed = true;
+    return { id, pnr: booking.pnr, status: 'cancelled', refundStatus: refund.status, refundReference: refund.reference };
+  } catch (err) {
+    if (!committed) {
+      try {
+        await client.query('ROLLBACK');
+      } catch {
+        // connection already broken; nothing more to do
+      }
+    }
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+module.exports = { book, listForUser, cancel };

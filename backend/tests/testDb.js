@@ -12,12 +12,12 @@ async function resetDb() {
   );
 }
 
-async function seedTrip({ capacity = 2 } = {}) {
+async function seedTrip({ capacity = 2, departsIn = '1 day' } = {}) {
   const { rows } = await pool.query(
     `INSERT INTO trips (train_number, origin, destination, departure_utc, arrival_utc, fare, capacity)
-     VALUES ('T1', 'Bengaluru', 'Chennai', now() + interval '1 day', now() + interval '1 day 6 hours', 500.00, $1)
+     VALUES ('T1', 'Bengaluru', 'Chennai', now() + $2::interval, now() + $2::interval + interval '6 hours', 500.00, $1)
      RETURNING id`,
-    [capacity]
+    [capacity, departsIn]
   );
   const tripId = rows[0].id;
   for (let seatNumber = 1; seatNumber <= capacity; seatNumber++) {

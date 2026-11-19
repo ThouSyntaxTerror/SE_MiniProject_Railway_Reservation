@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { apiFetch, setToken } from '../api/client.js';
+import { apiFetch, setToken, setUser } from '../api/client.js';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -12,9 +12,10 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setError(null);
     try {
-      const { token } = await apiFetch('/sessions', { method: 'POST', body: { email, password } });
+      const { token, user } = await apiFetch('/sessions', { method: 'POST', body: { email, password } });
       setToken(token);
-      onLogin();
+      setUser(user);
+      onLogin(user);
       navigate('/search');
     } catch (err) {
       setError(err.message);
@@ -24,7 +25,7 @@ export default function Login({ onLogin }) {
   return (
     <div>
       <h1>Sign in</h1>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} noValidate>
         <label htmlFor="email">Email</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <label htmlFor="password">Password</label>

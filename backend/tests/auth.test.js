@@ -62,4 +62,22 @@ describe('login (FR-02)', () => {
     expect(res.status).toBe(200);
     expect(res.body.token).toEqual(expect.any(String));
   });
+
+  test('records successful and failed sign-ins without recording passwords (FR-09, SEC-04)', async () => {
+    const payload = { email: 'audit@example.com', password: 'correctpassword123' };
+    await request(app).post('/api/register').send(payload);
+    await request(app).post('/api/sessions').send(payload);
+    await request(app).post('/api/sessions').send({ ...payload, password: 'wrongpassword123' });
+
+    const { rows } = await pool.query(
+      "SELECT action, outcome FROM audit_events WHERE action = 'login' ORDER BY id"
+    );
+    expect(rows).toEqual([
+      { action: 'login', outcome: 'success' },
+      { action: 'login', outcome: 'failure' },
+    ]);
+    const { rows: logs } = await pool.query('SELECT * FROM audit_events');
+    expect(JSON.stringify(logs)).not.toContain(payload.password);
+    expect(JSON.stringify(logs)).not.toContain('wrongpassword123');
+  });
 });

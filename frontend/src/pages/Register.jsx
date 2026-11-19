@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { apiFetch } from '../api/client.js';
 
 export default function Register() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -12,7 +13,7 @@ export default function Register() {
     e.preventDefault();
     setError(null);
     try {
-      await apiFetch('/register', { method: 'POST', body: { email, password } });
+      await apiFetch('/register', { method: 'POST', body: { name, email, password } });
       navigate('/login');
     } catch (err) {
       setError(err.message);
@@ -22,9 +23,13 @@ export default function Register() {
   return (
     <div>
       <h1>Register</h1>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} noValidate>
+        <label htmlFor="name">Full name</label>
+        <input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+
         <label htmlFor="email">Email</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
         <label htmlFor="password">Password (12+ characters)</label>
         <input
           id="password"

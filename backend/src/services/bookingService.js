@@ -98,6 +98,16 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
         // connection already broken; nothing more to do
       }
     }
+    // NFR-03: under a final-seat race the partial unique index (or a serialization/deadlock
+    // failure) can surface as a driver error. That is still "seat unavailable" to the caller,
+    // never a 500.
+    if (
+      err.code === '40001' ||
+      err.code === '40P01' ||
+      (err.code === '23505' && err.constraint === 'one_confirmed_booking_per_seat')
+    ) {
+      throw new AppError(409, 'SEAT_UNAVAILABLE', 'No seats available on this trip.');
+    }
     throw err;
   } finally {
     client.release();

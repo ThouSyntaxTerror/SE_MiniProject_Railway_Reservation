@@ -43,8 +43,9 @@ describe('availability (FR-04)', () => {
 
     const tripId = await seedTrip({ capacity: 2 });
     await pool.query('UPDATE trips SET enabled = false WHERE id = $1', [tripId]);
-    const res = await request(app).get(`/api/trips/${tripId}/availability`);
-    expect(res.status).toBe(200);
-    expect(res.body.enabled).toBe(false);
+    const res = await request(app)
+      .get('/api/trips')
+      .query({ origin: 'Bengaluru', destination: 'Chennai', date: new Date(Date.now() + 86400000).toISOString().slice(0, 10) });
+    expect(res.body.some((trip) => trip.id === tripId)).toBe(false);
   });
 });

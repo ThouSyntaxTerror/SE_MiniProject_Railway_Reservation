@@ -25,4 +25,14 @@ router.get('/', asyncHandler(async (req, res) => {
   res.status(200).json(bookings);
 }));
 
+// FR-07: cancellation. Ownership is enforced in the service so a non-owner gets 404.
+router.post('/:id/cancel', asyncHandler(async (req, res) => {
+  const result = await bookingService.cancel({
+    userId: req.user.id,
+    bookingId: req.params.id,
+    requestId: req.requestId,
+  });
+  res.status(200).json(result);
+}));
+
 module.exports = router;

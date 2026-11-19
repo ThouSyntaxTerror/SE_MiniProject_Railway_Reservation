@@ -3,9 +3,14 @@
 // the failure path (FR-05: failed payment releases the hold and creates no confirmed booking).
 
 let forceFailure = false;
+let forceRefundFailure = false;
 
 function setForceFailure(value) {
   forceFailure = value;
+}
+
+function setForceRefundFailure(value) {
+  forceRefundFailure = value;
 }
 
 function authorize(transactionRef) {
@@ -15,4 +20,10 @@ function authorize(transactionRef) {
   return { status: 'success', reference: transactionRef };
 }
 
-module.exports = { authorize, setForceFailure };
+// FR-07: deterministic simulated refund; the reference is derived from the PNR so it is stable.
+function refund(pnr) {
+  const reference = `RFND-${pnr}`;
+  return { status: forceRefundFailure ? 'failed' : 'success', reference };
+}
+
+module.exports = { authorize, refund, setForceFailure, setForceRefundFailure };

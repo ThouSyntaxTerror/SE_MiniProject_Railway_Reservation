@@ -17,7 +17,7 @@ Goal: make the Sprint 1 scaffold satisfy FR-01–FR-09, SEC-01–SEC-04.
 | `test/security-recovery` | Atharv | SEC-01/02/03 tests, HTTPS config, NFR-04 helper | see Pull requests |
 | `test/fr04-availability` | Rizwan | FR-04 bounds and disabled-trip tests | [#25](https://github.com/ThouSyntaxTerror/SE_MiniProject_Railway_Reservation/pull/25) |
 
-Merge order: foundation → admin → passenger → booking → security → availability. Each PR needs a
+Merge order: foundation → admin → cancellation → passenger → security → availability → docs. Each PR needs a
 green CI run and one approving review from a member other than the author; the repository owner
 merges.
 

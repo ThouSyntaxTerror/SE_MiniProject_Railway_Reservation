@@ -1,5 +1,7 @@
 # Affan — FR-05/FR-07/SEC-04/NFR-05/NFR-06 (Test Case owner)
 
+> Merge position 3: this branch is the base of Mohit's passenger branch, so merge it before his.
+
 **Branch:** `feat/fr05-fr07-cancellation`
 **Issues:** #10 (FR-07); refs #5 (FR-05), #13 (SEC-04), #18, #19
 **Reviewer for your PR:** Mohit

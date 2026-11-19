@@ -38,6 +38,13 @@ Totals: **Sprint 1 = 56 points**, **Sprint 2 = 20 points**, 76 points overall.
 
 Mohit 19 · Affan 19 · Atharv 19 · Rizwan 19.
 
+## Current GitHub state (19 Nov 2026)
+
+- Milestones **Sprint 1** (#1, #2, #3, #5, #6, #7, #8, #9, #10, #11, #12, #13) and **Sprint 2**
+  (#4, #14, #15, #16, #17, #18, #19) are created and every issue is assigned to one.
+- The Projects v2 board itself still has to be created in the UI (the available token has `repo`
+  but not `project` scope); the fields/values are in the table above.
+
 ## Setting it up (UI, ~10 minutes)
 
 1. Repo → **Projects** → **New project** → *Board* → name it `RRS Sprint Board`.

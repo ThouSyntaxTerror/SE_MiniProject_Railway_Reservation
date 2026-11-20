@@ -42,6 +42,7 @@ export default function App() {
     <div className="app">
       <a className="skip-link" href="#main">Skip to content</a>
       <nav aria-label="Main navigation">
+        <Link className="nav-brand" to="/search">Railway Reservation</Link>
         <Link to="/search">Search</Link>
         {authed && <Link to="/my-bookings">My bookings</Link>}
         {authed && user?.role === 'admin' && <Link to="/admin">Admin</Link>}

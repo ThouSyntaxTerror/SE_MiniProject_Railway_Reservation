@@ -52,5 +52,6 @@ they are **not claimed as passed** until the named owner performs them and recor
 
 - [x] Chrome 157, Edge 157, Firefox 160 at 375 px and 1280 px: no horizontal scroll (Affan; automated-driven, headless; defect D-07 on My bookings found and fixed; see `docs/evidence/nfr05-nfr06/RESULTS.md`)
 - [x] Keyboard-only registration → search → booking → cancel (Affan; 23/23 steps in all three browsers; see `docs/evidence/nfr05-nfr06/RESULTS.md`)
+- [x] Both checks re-run on the redesigned UI (PR #31): keyboard 27/27 steps and no-overflow 8/8 pages in each of Chrome 157, Edge 157, Firefox 160; no unnamed controls (see "Re-run on the redesigned UI" in `docs/evidence/nfr05-nfr06/RESULTS.md`)
 - [ ] DevTools shows `https` for `/api` requests under Caddy (Atharv)
 - [ ] 30-minute idle expiry observed on the deployed instance (Atharv)

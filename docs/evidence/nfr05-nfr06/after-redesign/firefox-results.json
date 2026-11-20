@@ -1,0 +1,387 @@
+{
+  "browser": "firefox",
+  "version": "160.0.1",
+  "email": "kbd-firefox-1795155081@example.com",
+  "keyboard": [
+    {
+      "step": "First Tab stop is the skip link",
+      "ok": true,
+      "detail": "{\"focusVisible\": true, \"id\": null, \"name\": \"Skip to content\", \"tag\": \"a\", \"type\": null}"
+    },
+    {
+      "step": "Enter on skip link moves past navigation",
+      "ok": true,
+      "detail": "http://localhost:5173/register#main"
+    },
+    {
+      "step": "Tab to Full name",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "name",
+        "name": "Full name",
+        "tag": "input",
+        "type": "text"
+      },
+      "stops": [
+        "input:Full name"
+      ]
+    },
+    {
+      "step": "Tab to Email",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "email",
+        "name": "Email",
+        "tag": "input",
+        "type": "email"
+      },
+      "stops": [
+        "input:Email"
+      ]
+    },
+    {
+      "step": "Tab to Password",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "password",
+        "name": "Password (12+ characters)",
+        "tag": "input",
+        "type": "password"
+      },
+      "stops": [
+        "input:Password (12+ characters)"
+      ]
+    },
+    {
+      "step": "Tab to Create account",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": null,
+        "name": "Create account",
+        "tag": "button",
+        "type": "submit"
+      },
+      "stops": [
+        "button:Create account"
+      ]
+    },
+    {
+      "step": "Register submitted with Enter, lands on sign-in",
+      "ok": true,
+      "detail": "http://localhost:5173/login"
+    },
+    {
+      "step": "Tab to sign-in Email",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "email",
+        "name": "Email",
+        "tag": "input",
+        "type": "email"
+      },
+      "stops": [
+        "input:Email"
+      ]
+    },
+    {
+      "step": "Tab to sign-in Password",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "password",
+        "name": "Password",
+        "tag": "input",
+        "type": "password"
+      },
+      "stops": [
+        "input:Password"
+      ]
+    },
+    {
+      "step": "Sign-in submitted with Enter (in password field), lands on search",
+      "ok": true,
+      "detail": "http://localhost:5173/search"
+    },
+    {
+      "step": "Tab to Origin",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "origin",
+        "name": "ORIGIN",
+        "tag": "input",
+        "type": "text"
+      },
+      "stops": [
+        "input:ORIGIN"
+      ]
+    },
+    {
+      "step": "Tab to Destination",
+      "ok": true,
+      "tabs": 2,
+      "landed": {
+        "focusVisible": true,
+        "id": "destination",
+        "name": "DESTINATION",
+        "tag": "input",
+        "type": "text"
+      },
+      "stops": [
+        "button:Swap origin and destination",
+        "input:DESTINATION"
+      ]
+    },
+    {
+      "step": "Tab to Travel date",
+      "ok": true,
+      "tabs": 1,
+      "landed": {
+        "focusVisible": true,
+        "id": "date",
+        "name": "TRAVEL DATE",
+        "tag": "input",
+        "type": "date"
+      },
+      "stops": [
+        "input:TRAVEL DATE"
+      ]
+    },
+    {
+      "step": "Typed travel date with keys only (tried dmy)",
+      "ok": true,
+      "detail": "2026-11-21"
+    },
+    {
+      "step": "Tab to Search button",
+      "ok": true,
+      "tabs": 2,
+      "landed": {
+        "focusVisible": true,
+        "id": null,
+        "name": "Search",
+        "tag": "button",
+        "type": "submit"
+      },
+      "stops": [
+        "input:TRAVEL DATE",
+        "button:Search"
+      ]
+    },
+    {
+      "step": "Search submitted with Enter, results listed",
+      "ok": true,
+      "detail": "2 journeys"
+    },
+    {
+      "step": "Tab to the Night departure filter",
+      "ok": true,
+      "tabs": 9,
+      "landed": {
+        "focusVisible": true,
+        "id": null,
+        "name": "Night (00:00 \u2013 06:00)",
+        "tag": "input",
+        "type": "checkbox"
+      },
+      "stops": [
+        "div:Nearby dates and lowest fares",
+        "button:Fri, 20 Nov\n\u20b9480.00",
+        "button:Sat, 21 Nov\n\u20b9480.00",
+        "button:Sun, 22 Nov\n\u20b9480.00",
+        "button:Mon, 23 Nov\nNo trains",
+        "button:Tue, 24 Nov\nNo trains",
+        "button:Wed, 25 Nov\nNo trains",
+        "button:Thu, 26 Nov\nNo trains",
+        "input:Night (00:00 \u2013 06:00)"
+      ]
+    },
+    {
+      "step": "Space on a filter checkbox changes the results",
+      "ok": true,
+      "detail": "2 -> 0 journeys"
+    },
+    {
+      "step": "Space again restores the results",
+      "ok": true,
+      "detail": "2 journeys"
+    },
+    {
+      "step": "Enter on the selected date-strip button re-runs the search; results and pressed state intact",
+      "ok": true,
+      "detail": "2 journeys; pressed day: Sat, 21 Nov \u20b9480.00"
+    },
+    {
+      "step": "Tab to first Book button",
+      "ok": true,
+      "tabs": 13,
+      "landed": {
+        "focusVisible": true,
+        "id": null,
+        "name": "Book train 12627 departing 11:02",
+        "tag": "button",
+        "type": "button"
+      },
+      "stops": [
+        "button:Sun, 22 Nov\n\u20b9480.00",
+        "button:Mon, 23 Nov\nNo trains",
+        "button:Tue, 24 Nov\nNo trains",
+        "button:Wed, 25 Nov\nNo trains",
+        "button:Thu, 26 Nov\nNo trains",
+        "input:Night (00:00 \u2013 06:00)",
+        "input:Morning (06:00 \u2013 12:00)",
+        "input:Afternoon (12:00 \u2013 18:00)",
+        "input:Evening (18:00 \u2013 24:00)",
+        "input:Only trains with seats",
+        "input:Maximum fare",
+        "select:Sort by",
+        "button:Book train 12627 departing 11:02"
+      ]
+    },
+    {
+      "step": "Booking confirmed with Enter, PNR announced in role=status",
+      "ok": true,
+      "detail": "status: Booked. PNR 57C0C5CD, seat 3 on train 12627. View in My bookings"
+    },
+    {
+      "step": "Shift+Tab back to the My bookings nav link",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "Enter on My bookings link opens the list",
+      "ok": true,
+      "detail": "http://localhost:5173/my-bookings"
+    },
+    {
+      "step": "Tab to Cancel button",
+      "ok": true,
+      "tabs": 2,
+      "landed": {
+        "focusVisible": true,
+        "id": null,
+        "name": "Cancel booking 57C0C5CD",
+        "tag": "button",
+        "type": "button"
+      },
+      "stops": [
+        "button:Sign out",
+        "button:Cancel booking 57C0C5CD"
+      ]
+    },
+    {
+      "step": "Cancellation done with Enter, refund reference announced in role=status",
+      "ok": true,
+      "detail": "status: Booking 57C0C5CD cancelled. Refund reference: RFND-57C0C5CD"
+    },
+    {
+      "step": "Focus indicator visible on every focused control",
+      "ok": true,
+      "detail": "13/13 landing stops"
+    }
+  ],
+  "viewport": [
+    {
+      "page": "login",
+      "requested": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "register",
+      "requested": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "search-results",
+      "requested": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "my-bookings",
+      "requested": 375,
+      "innerWidth": 375,
+      "scrollWidth": 375,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "login",
+      "requested": 1280,
+      "innerWidth": 1280,
+      "scrollWidth": 1280,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "register",
+      "requested": 1280,
+      "innerWidth": 1280,
+      "scrollWidth": 1280,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "search-results",
+      "requested": 1280,
+      "innerWidth": 1280,
+      "scrollWidth": 1280,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    },
+    {
+      "page": "my-bookings",
+      "requested": 1280,
+      "innerWidth": 1280,
+      "scrollWidth": 1280,
+      "formsInside": true,
+      "overflowing": [],
+      "pass": true
+    }
+  ],
+  "audit": [
+    {
+      "page": "/login",
+      "unnamed": []
+    },
+    {
+      "page": "/register",
+      "unnamed": []
+    },
+    {
+      "page": "/search",
+      "unnamed": []
+    },
+    {
+      "page": "/my-bookings",
+      "unnamed": []
+    }
+  ]
+}

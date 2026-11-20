@@ -56,3 +56,24 @@ Measured `document.scrollWidth` vs viewport and whether any element or form over
 - Headless runs, one machine (Windows 11). A person looking at a screen reader or a real phone was not part of this.
 - Admin pages were not exercised in this run.
 - Firefox is the installed release (not a Playwright build); Edge and Chrome are the installed stable releases.
+
+## Re-run on the redesigned UI (PR #31)
+Run date: 2026-11-20 · Tester: Affan Dumba (PES1UG24CS280) · App: branch `affan/ui-polish`, local Postgres, Vite dev server. Same method as above (Selenium, installed browsers, headless, true 375 px frame). Screenshots and raw JSON are in `after-redesign/`.
+
+Browsers: Chrome 157.0.8103.79, Edge 157.0.4341.60, Firefox 160.0.1
+
+| Check | Chrome | Edge | Firefox |
+|---|---|---|---|
+| Keyboard-only workflow at 1280 px (27 steps) | 27/27 PASS | 27/27 PASS | 27/27 PASS |
+| No horizontal scroll, 4 pages × 375 px and 1280 px (8 checks) | 8/8 PASS | 8/8 PASS | 8/8 PASS |
+| Controls without an accessible name (login, register, search, my-bookings) | none | none | none |
+| Focus indicator visible on every focused control | 13/13 | 13/13 | 13/13 |
+
+The workflow gained four steps because the Search page gained controls. New steps, all PASS in the three browsers:
+- Tab to the Night departure filter, Space changes the results (2 to 0 journeys), Space again restores them (2 journeys)
+- Enter on the selected date-strip button re-runs the search; results and the pressed state stay intact
+- "Book" buttons are now named per train (for example "Book train 12627 departing 11:02")
+
+Notes:
+- The Search results are now a list of journey cards (not a table). The 375 px check excludes the date strip and the decorative hero SVG, which scroll or clip inside their own containers; `document.scrollWidth` equals the viewport in every case.
+- Same limits as above: headless, one machine, no screen reader or physical phone, admin pages not exercised.

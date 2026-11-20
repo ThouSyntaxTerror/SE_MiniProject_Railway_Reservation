@@ -21,8 +21,9 @@ export default function Register() {
   }
 
   return (
-    <div>
+    <div className="auth-page">
       <h1>Register</h1>
+      <p className="subtle">Create a passenger account to book trains.</p>
       <form onSubmit={onSubmit} noValidate>
         <label htmlFor="name">Full name</label>
         <input id="name" value={name} onChange={(e) => setName(e.target.value)} required />

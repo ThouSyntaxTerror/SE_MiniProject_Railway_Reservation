@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import Register from './pages/Register.jsx';
 import Login from './pages/Login.jsx';
 import Search from './pages/Search.jsx';
@@ -38,20 +38,38 @@ export default function App() {
     setAuthed(true);
   }
 
+  const initials = (user?.name || user?.email || '?')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
   return (
     <div className="app">
       <a className="skip-link" href="#main">Skip to content</a>
       <nav aria-label="Main navigation">
-        <Link to="/search">Search</Link>
-        {authed && <Link to="/my-bookings">My bookings</Link>}
-        {authed && user?.role === 'admin' && <Link to="/admin">Admin</Link>}
+        <Link className="nav-brand" to="/search">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="5" y="3" width="14" height="14" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
+            <path d="M5 11h14" stroke="currentColor" strokeWidth="2" />
+            <circle cx="9" cy="14" r="1.2" fill="currentColor" />
+            <circle cx="15" cy="14" r="1.2" fill="currentColor" />
+            <path d="M8 21l2-4M16 21l-2-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          Railway Reservation
+        </Link>
+        <NavLink to="/search">Search</NavLink>
+        {authed && <NavLink to="/my-bookings">My bookings</NavLink>}
+        {authed && user?.role === 'admin' && <NavLink to="/admin">Admin</NavLink>}
         {authed ? (
-          <>
+          <div className="nav-user-box">
+            <span className="avatar" aria-hidden="true">{initials}</span>
             <span className="nav-user">{user?.name || user?.email}</span>
             <button type="button" onClick={signOut}>Sign out</button>
-          </>
+          </div>
         ) : (
-          <Link to="/login">Sign in</Link>
+          <NavLink to="/login">Sign in</NavLink>
         )}
       </nav>
 

@@ -32,7 +32,7 @@ export default function MyBookings() {
     <div>
       <h1>My bookings</h1>
       {error && <p className="error" role="alert">{error}</p>}
-      {notice && <p role="status">{notice}</p>}
+      {notice && <p className="success" role="status">{notice}</p>}
       {bookings.length === 0 && !error && <p>No bookings yet.</p>}
       {bookings.length > 0 && (
         <div className="table-wrap">
@@ -57,10 +57,10 @@ export default function MyBookings() {
                 </td>
                 <td>{b.seat_number}</td>
                 <td>{b.fare}</td>
-                <td>{b.status}</td>
+                <td><span className={`badge badge-${b.status}`}>{b.status}</span></td>
                 <td>
                   {b.status === 'confirmed' && (
-                    <button type="button" onClick={() => handleCancel(b)} aria-label={`Cancel booking ${b.pnr}`}>
+                    <button type="button" className="btn-danger" onClick={() => handleCancel(b)} aria-label={`Cancel booking ${b.pnr}`}>
                       Cancel
                     </button>
                   )}

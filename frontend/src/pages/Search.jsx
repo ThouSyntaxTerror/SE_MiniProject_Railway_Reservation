@@ -60,14 +60,21 @@ export default function Search() {
         <h1>Search trains</h1>
         <p>Pick a route and a date. Confirmed seats, instant refunds on cancellation.</p>
         <svg className="hero-art" viewBox="0 0 320 90" aria-hidden="true" focusable="false">
-          <path d="M0 78h320" stroke="currentColor" strokeWidth="2" opacity=".35" />
-          <path d="M10 86h300" stroke="currentColor" strokeWidth="2" strokeDasharray="6 8" opacity=".25" />
-          <rect x="40" y="26" width="64" height="40" rx="8" fill="currentColor" opacity=".9" />
-          <rect x="108" y="30" width="60" height="36" rx="6" fill="currentColor" opacity=".7" />
-          <rect x="172" y="30" width="60" height="36" rx="6" fill="currentColor" opacity=".55" />
-          <rect x="236" y="30" width="60" height="36" rx="6" fill="currentColor" opacity=".4" />
-          <circle cx="62" cy="72" r="6" fill="currentColor" />
-          <circle cx="90" cy="72" r="6" fill="currentColor" />
+          <path d="M0 80h320" stroke="currentColor" strokeWidth="2" opacity=".4" />
+          <path className="track" d="M0 86h320" stroke="currentColor" strokeWidth="3" strokeDasharray="8 10" opacity=".35" />
+          <g className="train">
+            <rect x="40" y="24" width="68" height="42" rx="10" fill="currentColor" />
+            <rect x="82" y="32" width="18" height="14" rx="3" fill="#1d4ed8" />
+            <rect x="112" y="30" width="58" height="36" rx="7" fill="currentColor" opacity=".75" />
+            <rect x="176" y="30" width="58" height="36" rx="7" fill="currentColor" opacity=".55" />
+            <rect x="240" y="30" width="58" height="36" rx="7" fill="currentColor" opacity=".4" />
+            <rect x="120" y="38" width="12" height="10" rx="2" fill="#1d4ed8" opacity=".6" />
+            <rect x="140" y="38" width="12" height="10" rx="2" fill="#1d4ed8" opacity=".6" />
+            <rect x="184" y="38" width="12" height="10" rx="2" fill="#1d4ed8" opacity=".5" />
+            <rect x="204" y="38" width="12" height="10" rx="2" fill="#1d4ed8" opacity=".5" />
+            <circle cx="62" cy="72" r="6" fill="currentColor" />
+            <circle cx="92" cy="72" r="6" fill="currentColor" />
+          </g>
         </svg>
       </section>
       <form className="search-card" onSubmit={onSearch} noValidate>

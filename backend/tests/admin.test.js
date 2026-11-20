@@ -235,3 +235,40 @@ describe('administrator validation (FR-08)', () => {
     expect(rows).toEqual([{ outcome: 'success' }]);
   });
 });
+
+describe('trip field normalisation (FR-03, FR-08)', () => {
+  test('trims origin/destination/train number so search can find the trip', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const created = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ...TRIP, train_number: '  NT-1  ', origin: '  Bengaluru  ', destination: '  Chennai  ' });
+
+    expect(created.status).toBe(201);
+    expect(created.body.train_number).toBe('NT-1');
+    expect(created.body.origin).toBe('Bengaluru');
+    expect(created.body.destination).toBe('Chennai');
+
+    const search = await request(app)
+      .get('/api/trips')
+      .query({ origin: 'Bengaluru', destination: 'Chennai', date: TRIP.departure_utc.slice(0, 10) });
+    expect(search.body.some((trip) => trip.id === created.body.id)).toBe(true);
+  });
+
+  test('trims fields on a PATCH as well', async () => {
+    const token = await seedUser({ role: 'admin' });
+    const created = await request(app)
+      .post('/api/admin/trips')
+      .set('Authorization', `Bearer ${token}`)
+      .send(TRIP);
+
+    const patched = await request(app)
+      .patch(`/api/admin/trips/${created.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ origin: '  Bengaluru  ', destination: '  Chennai  ' });
+
+    expect(patched.status).toBe(200);
+    expect(patched.body.origin).toBe('Bengaluru');
+    expect(patched.body.destination).toBe('Chennai');
+  });
+});

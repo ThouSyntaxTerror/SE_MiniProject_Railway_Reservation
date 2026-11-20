@@ -13,6 +13,18 @@ function parseTripId(tripId) {
   return id;
 }
 
+// FR-03/FR-08: store the fields the search compares exactly. A trailing space typed into the
+// admin form would otherwise make the trip invisible to search ("bandra " != "bandra").
+function normaliseTripInput(input) {
+  const normalised = { ...input };
+  for (const field of ['train_number', 'origin', 'destination']) {
+    if (typeof normalised[field] === 'string') {
+      normalised[field] = normalised[field].trim();
+    }
+  }
+  return normalised;
+}
+
 // `existing` lets a PATCH validate the merged state (e.g. only departure_utc supplied) instead of
 // comparing two half-present fields.
 function validateTripInput(input, { partial = false, existing = null } = {}) {
@@ -73,6 +85,7 @@ async function listTrips() {
 // FR-08: create a trip and materialise its seat rows in one transaction.
 async function createTrip(input, { actorId, requestId }) {
   validateTripInput(input);
+  const data = normaliseTripInput(input);
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -80,8 +93,8 @@ async function createTrip(input, { actorId, requestId }) {
       `INSERT INTO trips (train_number, origin, destination, departure_utc, arrival_utc, fare, capacity)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING id, train_number, origin, destination, departure_utc, arrival_utc, fare, capacity, enabled`,
-      [input.train_number, input.origin, input.destination, input.departure_utc,
-       input.arrival_utc, input.fare, input.capacity]
+      [data.train_number, data.origin, data.destination, data.departure_utc,
+       data.arrival_utc, data.fare, data.capacity]
     );
     const trip = rows[0];
     for (let seatNumber = 1; seatNumber <= trip.capacity; seatNumber++) {
@@ -109,6 +122,7 @@ async function updateTrip(tripId, input, { actorId, requestId }) {
       throw new AppError(404, 'TRIP_NOT_FOUND', 'Trip not found.');
     }
     validateTripInput(input, { partial: true, existing: trip });
+    const data = normaliseTripInput(input);
 
     if (input.capacity !== undefined && input.capacity < trip.capacity) {
       const { rows: taken } = await client.query(
@@ -124,8 +138,8 @@ async function updateTrip(tripId, input, { actorId, requestId }) {
     const updates = [];
     const values = [];
     for (const field of TRIP_FIELDS) {
-      if (input[field] !== undefined) {
-        values.push(input[field]);
+      if (data[field] !== undefined) {
+        values.push(data[field]);
         updates.push(`${field} = $${values.length}`);
       }
     }

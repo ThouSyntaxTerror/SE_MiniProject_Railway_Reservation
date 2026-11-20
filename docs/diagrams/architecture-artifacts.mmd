@@ -1,0 +1,76 @@
+%% Railway Reservation System - component/artifact relationships (Team E15)
+flowchart TB
+  subgraph P["1 Presentation - React SPA (frontend/src)"]
+    UI["pages/ Register · Login · Search · MyBookings · Admin"]
+    CL["api/client.js - fetch + Bearer token"]
+    APP["App.jsx - routes, RequireAuth, RequireAdmin"]
+  end
+
+  EDGE["2 Caddy - deploy/Caddyfile - TLS, HSTS, reverse proxy"]
+
+  subgraph API["3 Express API (backend/src)"]
+    MW["middleware/ errors.js, auth.js - requireAuth, requireRole"]
+    RT["routes/ auth.js, trips.js, bookings.js, admin.js"]
+    APPF["app.js / server.js - wiring, /health, 404/500"]
+  end
+
+  subgraph SVC["4 Domain services"]
+    AUTH["authService.js - register, login, session, lockout"]
+    SEARCH["trainSearchService.js - search, availability"]
+    BOOK["bookingService.js - book, cancel, history"]
+    ADMIN["adminService.js - trip CRUD, audit read"]
+    AUDIT["auditService.js - append event"]
+    PAY["paymentSimulator.js - authorize / refund"]
+  end
+
+  POOL["5 db/pool.js · db/migrate.js · db/schema.sql"]
+
+  subgraph DB["6 PostgreSQL"]
+    U[(users)]
+    S[(sessions)]
+    T[(trips)]
+    SE[(seats)]
+    B[(bookings)]
+    PE[(payment_events)]
+    AE[(audit_events)]
+  end
+
+  subgraph E["Verification and evidence"]
+    CI["GitHub Actions - ci.yml - Jest + Postgres 16, Vite build"]
+    TESTS["backend/tests - 55 tests / 8 suites"]
+    SCRIPTS["scripts - seedPerformance, loadTest, recoveryCheck"]
+    DOCS["01 SRS · 02 Test Plan · 03 SAD · 04 Test Cases · reports"]
+  end
+
+  UI --> CL --> EDGE --> RT
+  APP --> CL
+  EDGE --> APPF
+  RT --> MW
+  RT --> AUTH
+  RT --> SEARCH
+  RT --> BOOK
+  RT --> ADMIN
+  AUTH --> U
+  AUTH --> S
+  SEARCH --> T
+  SEARCH --> B
+  BOOK --> SE
+  BOOK --> B
+  BOOK --> PE
+  BOOK --> PAY
+  ADMIN --> T
+  ADMIN --> SE
+  ADMIN --> AUDIT
+  BOOK --> AUDIT
+  AUTH --> AUDIT
+  AUDIT --> AE
+  AUTH --> POOL
+  SEARCH --> POOL
+  BOOK --> POOL
+  ADMIN --> POOL
+  POOL --> DB
+  CI --> TESTS
+  TESTS -. Supertest .-> RT
+  SCRIPTS -. seed / load .-> T
+  SCRIPTS -. load .-> RT
+  DOCS -. traceability .-> SVC

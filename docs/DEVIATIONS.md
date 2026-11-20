@@ -12,6 +12,7 @@ real ones, recorded at the time of completion (19 November 2026).
 | D-05 | Sprint 1 demo video recorded during Sprint 1 | **Not recorded yet.** Both videos are to be recorded from the merged `main` and committed under `docs/media/` | The sprints were compressed into one day and recording equipment/voice-over was not available during the run | No video is claimed as evidence until it is committed; scripts are ready |
 | D-06 | NFR-05/NFR-06 closed by automated tests | Implemented and reviewed, but the manual browser/keyboard matrix is **awaiting sign-off** | Browser matrix is manual by nature; no browser automation runner was added | Named manual checks remain pending in `TEST_EXECUTION_REPORT.md` |
 | D-07 | Part 1 PDFs v1.1 | Unchanged | The implementation was brought to the documents, not the other way round | No requirement changes; traceability holds |
+| D-08 | Every PR is raised by the member assigned to the issue | **#27** (FR-01/02/03) was opened and merged from Atharv's account although issues **#1–#3** are assigned to Mohit | The branch was prepared during the compressed run; Mohit added the edge-case tests, but the PR was opened from the wrong account. Git history was not rewritten. | Mohit can explain and demo the code; the contribution split is recorded here instead of faking authorship |
 
 ## Not claimed
 

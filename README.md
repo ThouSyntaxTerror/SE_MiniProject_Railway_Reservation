@@ -25,6 +25,7 @@ The Test Case Update is also incorporated into §5.2 of the Test Plan, as requir
 - [Deviations](docs/DEVIATIONS.md)
 - [HTTPS deployment](docs/HTTPS_DEPLOYMENT.md)
 - [Demo scripts](docs/DEMO_SCRIPT.md) (1-minute Sprint 1, 2-minute Sprint 2)
+- [Sprint 1 demo video](docs/media/sprint1-demo.mp4) (60 s) · [Sprint 2 demo video](docs/media/sprint2-demo.mp4) (2 min)
 - [Team playbooks](docs/team/)
 
 ## Running the application

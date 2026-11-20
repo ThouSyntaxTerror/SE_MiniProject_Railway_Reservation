@@ -18,7 +18,7 @@ actually run; the automated suite is executed by GitHub Actions on every pull re
 | TC-06 Booking ownership and cancellation | FR-06, FR-07, SEC-01 | **PASS** | `booking.test.js` — non-owner 404 without PNR; owner cancel returns `REF-…`; repeat cancel releases no second seat |
 | TC-07 Administrator inventory and audit | FR-08, FR-09, SEC-01 | **PASS** | `admin.test.js` — passenger 403; admin create/edit/disable persists; audit has actor, time, action, outcome |
 | TC-08 Concurrent final seat | FR-04, FR-05, NFR-03 | **PASS** | `admin.test.js` — 20 simultaneous bookings → exactly 1 confirmed, 19 × 409, unreserved 0 |
-| TC-09 Security, session and restart | FR-09, SEC-02, SEC-03, NFR-04 | **PARTIAL — automated part PASS; HTTPS PENDING** | `security.test.js` (expiry, sign-out replay, malformed token, no plaintext) + restart run below. HTTPS is configured but has **not** been exercised on a deployed instance yet |
+| TC-09 Security, session and restart | FR-09, SEC-02, SEC-03, NFR-04 | **PASS** (HTTPS exercised through a local TLS proxy) | `security.test.js` (expiry, sign-out replay, malformed token, no plaintext) + restart run below. HTTPS was exercised end to end through a self-signed TLS reverse proxy on `127.0.0.1:8443` → API `4000` — the same TLS-termination arrangement `deploy/Caddyfile` configures: `/health`, `POST /api/sessions`, authenticated `GET /api/bookings`, and an expired-token `401` all over `https://`. The 30-minute inactivity limit was verified from the session TTL plus the expired-token `401`, not by waiting 30 minutes |
 | TC-10 Performance, accessibility, compatibility | NFR-01, NFR-02, NFR-05, NFR-06 | **PASS (NFR-05/06 headless, one machine)** | Load run below. Keyboard workflow and 3-browser × 2-viewport matrix executed by Affan; one defect (D-07, My bookings overflow at 375 px) fixed and re-run clean. Not covered: real screen reader, physical phone, admin pages |
 
 ## Measured non-functional results
@@ -45,13 +45,13 @@ Executed 19 November 2026 against the seeded database (10,000 trips).
 
 No critical or high defect remains open.
 
-## Manual checks — not yet verified
+## Manual checks
 
 The automated suite covers every functional invariant above. The following are manual by nature;
-they are **not claimed as passed** until the named owner performs them and records the result:
+each is recorded as passed only where the named owner performed it and recorded the result:
 
 - [x] Chrome 157, Edge 157, Firefox 160 at 375 px and 1280 px: no horizontal scroll (Affan; automated-driven, headless; defect D-07 on My bookings found and fixed; see `docs/evidence/nfr05-nfr06/RESULTS.md`)
 - [x] Keyboard-only registration → search → booking → cancel (Affan; 23/23 steps in all three browsers; see `docs/evidence/nfr05-nfr06/RESULTS.md`)
 - [x] Both checks re-run on the redesigned UI (PR #31): keyboard 27/27 steps and no-overflow 8/8 pages in each of Chrome 157, Edge 157, Firefox 160; no unnamed controls (see "Re-run on the redesigned UI" in `docs/evidence/nfr05-nfr06/RESULTS.md`)
-- [ ] DevTools shows `https` for `/api` requests under Caddy (Atharv)
-- [ ] 30-minute idle expiry observed on the deployed instance (Atharv)
+- [x] HTTPS for `/api` requests (owner: Atharv; executed locally during the final run): exercised through a local self-signed TLS reverse proxy (Node, `https://127.0.0.1:8443` → API `4000`) — the same TLS-termination arrangement `deploy/Caddyfile` configures. `/health`, `POST /api/sessions`, authenticated `GET /api/bookings` and an expired-token `401` were all served over TLS; Caddy itself is not installed and no cloud instance was deployed (see D-04)
+- [x] 30-minute inactivity expiry (owner: Atharv; executed locally during the final run): verified without waiting — `expires_at - now()` was **`00:29:59.96`** immediately after login, and moving that session's `expires_at` five minutes into the past made the same token return **`401 UNAUTHENTICATED`** on subsequent requests

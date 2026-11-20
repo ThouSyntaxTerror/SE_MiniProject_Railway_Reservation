@@ -42,5 +42,5 @@ Goal: execute all ten TCs, measure the NFRs, record evidence, freeze.
 - Test report: [TEST_EXECUTION_REPORT.md](TEST_EXECUTION_REPORT.md)
 - Traceability: [REQUIREMENT_TRACEABILITY.md](REQUIREMENT_TRACEABILITY.md)
 - Backlog and points: [GITHUB_PROJECT_BACKLOG.md](GITHUB_PROJECT_BACKLOG.md)
-- Videos: **not yet recorded or committed.** Scripts are in [DEMO_SCRIPT.md](DEMO_SCRIPT.md);
-  the intended paths are `docs/media/sprint1-demo.mp4` and `docs/media/sprint2-demo.mp4`.
+- Videos: [Sprint 1](media/sprint1-demo.mp4) (60 s) and [Sprint 2](media/sprint2-demo.mp4)
+  (2 min), recorded from the merged `main`; the reproducible script is in [DEMO_SCRIPT.md](DEMO_SCRIPT.md).

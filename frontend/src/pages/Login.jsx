@@ -23,8 +23,9 @@ export default function Login({ onLogin }) {
   }
 
   return (
-    <div>
+    <div className="auth-page">
       <h1>Sign in</h1>
+      <p className="subtle">Welcome back. Sign in to search trains and manage your bookings.</p>
       <form onSubmit={onSubmit} noValidate>
         <label htmlFor="email">Email</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />

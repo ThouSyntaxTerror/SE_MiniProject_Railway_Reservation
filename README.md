@@ -14,6 +14,7 @@ with a refund reference, administrator trip/capacity management, and an audit tr
 | 2 | [Test Plan](02_Test_Plan_Atharv_More_PES1UG24CS276.pdf) | Atharv More (PES1UG24CS276) |
 | 3 | [Software Architecture and Design Specification](03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272.pdf) | Mohammed Rizwan Shaikh (PES1UG24CS272) |
 | 4 | [Test Case Update](04_Test_Case_Update_Muhammad_Affan_Dumba_PES1UG24CS280.pdf) | Muhammad Affan Dumba (PES1UG24CS280) |
+| 5 | [Test Execution Report](05_Test_Execution_Report_Team_E15.pdf) | Team E15 (Sprint 2 results) |
 
 The Test Case Update is also incorporated into §5.2 of the Test Plan, as required.
 
@@ -25,6 +26,7 @@ The Test Case Update is also incorporated into §5.2 of the Test Plan, as requir
 - [Deviations](docs/DEVIATIONS.md)
 - [HTTPS deployment](docs/HTTPS_DEPLOYMENT.md)
 - [Demo scripts](docs/DEMO_SCRIPT.md) (1-minute Sprint 1, 2-minute Sprint 2)
+- [Sprint 1 demo video](docs/media/sprint1-demo.mp4) (60 s) · [Sprint 2 demo video](docs/media/sprint2-demo.mp4) (2 min)
 - [Team playbooks](docs/team/)
 
 ## Running the application

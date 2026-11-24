@@ -95,9 +95,11 @@ login(email, password)
 ```
 
 **Failure window (PR #39).** As first written, `failed_attempts` counted consecutive failures with no
-time limit (section 5, item 1). PR #39 adds `failed_window_start`: a failure more than 15 minutes after
-the window opened starts a new window at a count of one, so only five failures *within 15 minutes*
-lock the account, as the SRS says. The count is updated under a row lock (`SELECT … FOR UPDATE`), so
+time limit (section 5, item 1). PR #39 adds `recent_failures`, the times of the failed attempts in the
+last 15 minutes. Each failure drops the entries older than 15 minutes and adds itself; five entries lock
+the account. That is a sliding window: five failures inside *any* 15-minute span lock, as the SRS says,
+including a burst that straddles a boundary (a fixed window that reset every 15 minutes would let up to
+eight guesses through around the reset). The list is updated under a row lock (`SELECT … FOR UPDATE`), so
 simultaneous wrong guesses are counted one at a time and lock the account exactly once, and a guess
 that arrives after the lock is set changes nothing. The "is it locked?" check uses the database clock.
 
@@ -126,7 +128,7 @@ the history is visible. Until the named pull request is merged, the limit still 
 1. **Fixed by PR #39.** The lockout counted consecutive failures, not failures "within 15 minutes":
    `failed_attempts` was reset only by a successful sign-in or by locking and never expired, so five wrong
    passwords spread over several days locked the account. Stricter than the SRS, never weaker, but
-   different. PR #39 adds the 15-minute window described in section 3 and tests that move the clock.
+   different. PR #39 adds the sliding 15-minute window described in section 3 and tests that move the clock.
 2. **Open.** Unknown emails are never locked (there is no row to hold a counter). They also leak nothing,
    but a password-guessing run against a non-existent email is not slowed.
 3. **Fixed by PR #39.** Two clocks: `locked_until` was written with the database clock and compared with

@@ -46,7 +46,7 @@ Code written by Affan on `main`, from `git log`: the `cancel` function in `booki
 | #36 | 24 Nov | Code and branch coverage report; 37 new failure-path tests (branch coverage 85.29 % → 94.51 %); unit test report; CI keeps the coverage report | open | Awaiting review |
 | #37 | 24 Nov | System test report; 20-check live API script; UI flow script with screenshots | open | Awaiting review |
 | #38 | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Awaiting review |
-| #39 | 24 Nov | SEC-04 fix: count failures inside one 15-minute window, under a row lock, using the database clock (refs #13); 16 tests that move the clock | code + tests | Awaiting review |
+| #39 | 24 Nov | SEC-04 fix: count failures inside any 15-minute span (sliding window), under a row lock, using the database clock (refs #13); 17 tests that move the clock | code + tests | Awaiting review |
 | #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Awaiting review |
 | #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Awaiting review |
 
@@ -70,7 +70,7 @@ On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 as
 |---|---|---|---|
 | D-07 | My bookings table overflowed the viewport at 375 px (NFR-06) | The three-browser matrix | `.table-wrap` scroll container, PR #30; re-run clean |
 | A-01 | Every row of the admin Trips table had buttons named just "Save" and "Disable", so a screen-reader user could not tell which trip each acts on (NFR-05) | The admin-pages matrix | Buttons named per trip, PR #41; 28 of 28 in three browsers |
-| L-01 | Lockout counted consecutive failures instead of failures within 15 minutes (SEC-04), in teammate-written code | Writing the design note | Rolling window, PR #39; the new window tests fail against the old logic |
+| L-01 | Lockout counted consecutive failures instead of failures within 15 minutes (SEC-04), in teammate-written code | Writing the design note | Sliding window, PR #39; the window tests fail against the old logic. A first fixed-window version was itself found weaker than the SRS at the boundary during self-review and replaced before merge |
 | L-02 | `cancelled_utc` and `refund_reference` were never written, so the refund reference vanished after a reload (FR-07) | Writing the design note | Stored and shown, PR #40 |
 
 Writing the failure-path tests (#36) and the system test (#37) found no functional defect.

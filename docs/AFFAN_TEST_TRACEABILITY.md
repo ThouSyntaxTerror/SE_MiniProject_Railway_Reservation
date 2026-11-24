@@ -50,7 +50,7 @@ Key to the evidence column:
 | SRS clause | Check |
 |---|---|
 | After five failed attempts, further attempts are rejected for 15 minutes | `auth.test.js`: the sixth attempt is rejected and the rejection is audited. ‡ TC-02b/c (five 401s, then 429 `ACCOUNT_LOCKED` even with the correct password). § `lockoutWindow.test.js`: the lock lasts 15 minutes, ends after 15 minutes, guesses while locked do not extend it, eight parallel guesses lock exactly once |
-| ... **within 15 minutes** | § `lockoutWindow.test.js`: failures older than 15 minutes do not count; failures spread over three windows never lock; failures 14 minutes apart still do. Shown to fail against the old logic |
+| ... **within 15 minutes** | § `lockoutWindow.test.js`: failures older than 15 minutes do not count; failures spread over three windows never lock; failures 14 minutes apart still do; a burst that straddles the 15-minute mark still locks (sliding, not fixed, window). Shown to fail against the old logic |
 | Attempts are logged without the submitted password | `auth.test.js`: sign-ins audited without passwords. `security.test.js`: no password in responses or audit rows. ‡ TC-02d/e |
 | Unknown email and wrong password are indistinguishable (FR-02) | `auth.test.js`: generic error. ‡ TC-02a. † `errorPaths.test.js` sign-in validation (empty body, missing email, missing password: same 401) |
 | **Until PR #39 is merged** | `main` counts consecutive failures rather than failures within 15 minutes, and nothing tests the clock; see `CANCELLATION_AND_LOCKOUT_DESIGN.md` section 5 |

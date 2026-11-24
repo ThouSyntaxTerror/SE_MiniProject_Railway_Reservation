@@ -49,6 +49,7 @@ Code written by Affan on `main`, from `git log`: the `cancel` function in `booki
 | #39 | 24 Nov | SEC-04 fix: count failures inside any 15-minute span (sliding window), under a row lock, using the database clock (refs #13); 17 tests that move the clock | code + tests | Awaiting review |
 | #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Awaiting review |
 | #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Awaiting review |
+| #42 | 24 Nov | First frontend unit-test suite: 57 tests over every page and the API client (99.42 % statements, 94.57 % branches), run in CI | tests + docs | Awaiting review |
 
 On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 assigned issues closed.
 
@@ -63,6 +64,7 @@ On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 as
 | Design note and traceability (#38) | Records what the three assigned features do and which test covers each SRS clause, including the gaps |
 | Lockout window (#39), cancellation record (#40) | Fix the two code-versus-SRS gaps the design note found, instead of only recording them |
 | Admin pages matrix (#41) | The NFR-05/06 evidence listed the administrator pages as not covered |
+| Frontend unit tests (#42) | The frontend had no automated tests at all; the coverage report listed it as an accepted gap |
 
 ## 4. Defects found in own work
 
@@ -92,7 +94,7 @@ Writing the failure-path tests (#36) and the system test (#37) found no function
   coverage gaps earlier would have caught the untested rollback and validation branches sooner.
 - **What is still open.** Unknown emails are not rate-limited (no row to count against); the NFR-05/06
   checks cover headless browsers on one machine only (no screen reader, no physical phone); and the
-  deployed-HTTPS checks belong to another team member. Pull requests #36 to #41 are awaiting review.
+  deployed-HTTPS checks belong to another team member. Pull requests #36 to #42 are awaiting review.
 
 ## 7. Links
 

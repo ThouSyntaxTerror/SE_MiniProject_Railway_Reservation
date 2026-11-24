@@ -39,9 +39,9 @@ The Test Execution Report (5) is the 20 November snapshot; the current figures a
 | SAD | Deliverable 3; [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (component, sequence and data-model diagrams); [`docs/CANCELLATION_AND_LOCKOUT_DESIGN.md`](docs/CANCELLATION_AND_LOCKOUT_DESIGN.md) |
 | Backlog creation | Issues #1–#19 with story-point labels and Sprint milestones; [`docs/GITHUB_PROJECT_BACKLOG.md`](docs/GITHUB_PROJECT_BACKLOG.md) |
 | Sprint 1 and Sprint 2 | [`docs/SPRINT_LOG.md`](docs/SPRINT_LOG.md), [`docs/SPRINT_BURNDOWN.md`](docs/SPRINT_BURNDOWN.md), the two demo videos, milestones *Sprint 1* and *Sprint 2* |
-| Unit Test Report | Deliverable 6: 127 backend + 64 frontend tests, all passing |
+| Unit Test Report | Deliverable 6: 185 backend + 64 frontend tests, all passing |
 | System Test Report | Deliverable 7: 20 live API checks, a UI book-and-cancel flow, keyboard and viewport checks in three browsers; Deliverable 5 for the ten formal test cases |
-| Code and Branch Coverage Report | Deliverable 8: backend 98.12 % statements / 94.56 % branches; frontend 99.44 % / 94.24 % |
+| Code and Branch Coverage Report | Deliverable 8: backend 98.18 % statements / 94.82 % branches; frontend 99.44 % / 94.24 % |
 | Demonstration | [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) and the demo videos; run the app with the steps below |
 
 ## Part 2 evidence
@@ -83,7 +83,7 @@ Demo accounts created by `npm run migrate`:
 
 ```bash
 cd backend
-npm test                             # 127 Jest/Supertest tests, real Postgres
+npm test                             # 185 Jest/Supertest tests, real Postgres
 npm run test:coverage                # the same suite with statement and branch coverage
 npm run seed:perf                    # 10,000 trips for NFR-01
 npm run test:load -- --base http://localhost:3000

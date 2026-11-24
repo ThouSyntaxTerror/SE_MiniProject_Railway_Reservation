@@ -11,12 +11,12 @@ relied on the keyboard and browser matrix in [`evidence/nfr05-nfr06/RESULTS.md`]
 
 | Suite | Tests | Statements | Branches | Functions | Raw output |
 |---|---|---|---|---|---|
-| Backend (Jest) | 127 passed, 13 files | **98.12 %** (942 / 960) | **94.56 %** (261 / 276) | 94.28 % | [`evidence/coverage/main-after-merges.txt`](evidence/coverage/main-after-merges.txt) |
+| Backend (Jest) | 185 passed, 14 files | **98.18 %** (976 / 994) | **94.82 %** (275 / 290) | 94.44 % | [`evidence/coverage/main-after-merges.txt`](evidence/coverage/main-after-merges.txt) |
 | Frontend (Vitest) | 64 passed, 6 files | **99.44 %** (891 / 896) | **94.24 %** (213 / 226) | 98.71 % | [`evidence/frontend-tests/vitest-coverage.txt`](evidence/frontend-tests/vitest-coverage.txt) |
 
 The lockout, cancellation-record and booking-eligibility changes (#39, #40, #44) added new branches
 together with the tests for them, so the backend figure moved from the 94.51 % measured in #36 to
-94.56 %; every route and service is still at 100 % statements and lines. The sections
+94.82 % (the new `ids.js` is at 100 %); every route and service is still at 100 % statements and lines. The sections
 below record how the backend figure was raised from 85 % in the first place.
 
 ## Result of the failure-path work (PR #36)

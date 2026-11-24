@@ -1,0 +1,153 @@
+{
+  "browser": "chrome",
+  "version": "158.0.8127.37",
+  "train": "AM503717",
+  "keyboard": [
+    {
+      "step": "Tab to sign-in Email",
+      "ok": true,
+      "detail": "5 Tab(s) -> input 'Email', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to sign-in Password",
+      "ok": true,
+      "detail": "1 Tab(s) -> input 'Password', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Administrator signed in with Enter, lands on search",
+      "ok": true,
+      "detail": "http://localhost:5173/search"
+    },
+    {
+      "step": "Tab to the Admin link in the navigation",
+      "ok": true,
+      "detail": "5 Tab(s) -> a 'Admin', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Enter on Admin opens the Administration page",
+      "ok": true,
+      "detail": "http://localhost:5173/admin"
+    },
+    {
+      "step": "Every link, button and input on /admin has an accessible name",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "Row buttons name the trip they act on (no repeated \"Save\" / \"Disable\")",
+      "ok": false,
+      "detail": "Save x5; Disable x5"
+    },
+    {
+      "step": "Tab to Train number",
+      "ok": true,
+      "detail": "2 Tab(s) -> input 'Train number', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to Origin",
+      "ok": true,
+      "detail": "1 Tab(s) -> input 'Origin', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to Destination",
+      "ok": true,
+      "detail": "1 Tab(s) -> input 'Destination', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to Departure",
+      "ok": true,
+      "detail": "1 Tab(s) -> input 'Departure (local)', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to Arrival",
+      "ok": true,
+      "detail": "2 Tab(s) -> input 'Arrival (local)', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Departure and arrival typed with keys only",
+      "ok": true,
+      "detail": "2026-11-28T12:32 (dmy) / 2026-11-28T17:32 (dmy)"
+    },
+    {
+      "step": "Tab to Fare",
+      "ok": true,
+      "detail": "2 Tab(s) -> input 'Fare', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to Seat capacity",
+      "ok": true,
+      "detail": "1 Tab(s) -> input 'Seat capacity', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to Create trip",
+      "ok": true,
+      "detail": "1 Tab(s) -> button 'Create trip', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Create trip with Enter reports success",
+      "ok": true,
+      "detail": "status: Trip AM503717 created."
+    },
+    {
+      "step": "The new trip appears in the Trips table",
+      "ok": true,
+      "detail": "AM503717"
+    },
+    {
+      "step": "Tab to the new trip's capacity field",
+      "ok": true,
+      "detail": "15 Tab(s) -> input 'Capacity for AM503717', focus visible: True",
+      "focusVisible": true
+    },
+    {
+      "step": "Tab to its Save button",
+      "ok": false,
+      "detail": "not reached; stops: input:Origin | input:Destination | input:Departure (local) | input:Departure (local) | input:Departure (local) | input:Departure (local)"
+    },
+    {
+      "step": "Save capacity with Enter reports success",
+      "ok": false,
+      "detail": "alert: Invalid time value"
+    },
+    {
+      "step": "Tab to its Disable button",
+      "ok": false,
+      "detail": "not reached; stops: input:Fare | input:Seat capacity | button:Create trip | input:Capacity for 12627 | button:Save | button:Disable"
+    },
+    {
+      "step": "Disable asks for confirmation naming the trip",
+      "ok": false,
+      "detail": "'Disable trip 12627?'"
+    },
+    {
+      "step": "Confirming the disable reports success",
+      "ok": true,
+      "detail": "status: Trip 12627 disabled."
+    }
+  ],
+  "names": [
+    {
+      "check": "controls without an accessible name",
+      "found": []
+    },
+    {
+      "check": "row buttons whose name repeats",
+      "found": [
+        "Save x5",
+        "Disable x5"
+      ]
+    }
+  ],
+  "viewport": []
+}

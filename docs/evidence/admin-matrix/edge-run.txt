@@ -1,0 +1,30 @@
+PASS Tab to sign-in Email  [5 Tab(s) -> input 'Email', focus visible: True]
+PASS Tab to sign-in Password  [1 Tab(s) -> input 'Password', focus visible: True]
+PASS Administrator signed in with Enter, lands on search  [http://localhost:5173/search]
+PASS Tab to the Admin link in the navigation  [5 Tab(s) -> a 'Admin', focus visible: True]
+PASS Enter on Admin opens the Administration page  [http://localhost:5173/admin]
+PASS Every link, button and input on /admin has an accessible name
+PASS Row buttons name the trip they act on (no repeated "Save" / "Disable")
+PASS Tab to Train number  [2 Tab(s) -> input 'Train number', focus visible: True]
+PASS Tab to Origin  [1 Tab(s) -> input 'Origin', focus visible: True]
+PASS Tab to Destination  [1 Tab(s) -> input 'Destination', focus visible: True]
+PASS Tab to Departure  [1 Tab(s) -> input 'Departure (local)', focus visible: True]
+PASS Tab to Arrival  [2 Tab(s) -> input 'Arrival (local)', focus visible: True]
+PASS Departure and arrival typed with keys only  [2026-11-28T12:36 (dmy) / 2026-11-28T17:36 (dmy)]
+PASS Tab to Fare  [2 Tab(s) -> input 'Fare', focus visible: True]
+PASS Tab to Seat capacity  [1 Tab(s) -> input 'Seat capacity', focus visible: True]
+PASS Tab to Create trip  [1 Tab(s) -> button 'Create trip', focus visible: True]
+PASS Create trip with Enter reports success  [status: Trip AM504000 created.]
+PASS The new trip appears in the Trips table  [AM504000]
+PASS Tab to the new trip's capacity field  [23 Tab(s) -> input 'Capacity for AM504000', focus visible: True]
+PASS Capacity changed to 9 with the keyboard  ['9']
+PASS Tab to its Save button  [1 Tab(s) -> button 'Save capacity for AM504000', focus visible: True]
+PASS Save capacity with Enter reports success  [status: Trip AM504000 capacity updated.]
+PASS Tab to its Disable button  [1 Tab(s) -> button 'Disable trip AM504000', focus visible: True]
+PASS Disable asks for confirmation naming the trip  ['Disable trip AM504000?']
+PASS Confirming the disable reports success  [status: Trip AM504000 disabled.]
+PASS The trip is now disabled and its Disable button is inactive
+PASS /admin at 1280 px has no horizontal page scroll  [scrollWidth 1265 / innerWidth 1280]
+PASS /admin at 375 px has no horizontal page scroll  [scrollWidth 360 / innerWidth 375]
+
+edge 158.0.4370.33: 28/28 steps passed

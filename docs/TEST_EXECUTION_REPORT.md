@@ -3,7 +3,7 @@
 Build under test: Sprint 2 integration (`feat/fr08-admin` + `feat/fr01-fr03-passenger` +
 `feat/fr05-fr07-cancellation` + `test/security-recovery` + `test/fr04-availability`).
 Environment: Node 22 (CI) / Node 26 (local), PostgreSQL 16, Chrome/Edge/Firefox (manual checks),
-19 November 2026. Merged stack: `cd backend && npm test` — **116 tests, 116 passed, 12 suites**, 98.07 % statements and 94.14 % branches (24 November 2026, `main` after PRs #36 to #42; it was 55 tests in 8 suites on `integration/final` on 19 November and 57 on `main` before those PRs). Frontend: `cd frontend && npm test` — **57 tests, 57 passed**. Per-file breakdown: [`UNIT_TEST_REPORT.md`](UNIT_TEST_REPORT.md) and [`FRONTEND_TEST_REPORT.md`](FRONTEND_TEST_REPORT.md); coverage method and before/after: [`CODE_BRANCH_COVERAGE_REPORT.md`](CODE_BRANCH_COVERAGE_REPORT.md); live checks on a running instance: [`SYSTEM_TEST_REPORT.md`](SYSTEM_TEST_REPORT.md).
+19 November 2026. Merged stack: `cd backend && npm test` — **127 tests, 127 passed, 13 suites**, 98.12 % statements and 94.56 % branches (24 November 2026, after PR #44; it was 55 tests in 8 suites on `integration/final` on 19 November and 57 on `main` before those PRs). Frontend: `cd frontend && npm test` — **64 tests, 64 passed**. Per-file breakdown: [`UNIT_TEST_REPORT.md`](UNIT_TEST_REPORT.md) and [`FRONTEND_TEST_REPORT.md`](FRONTEND_TEST_REPORT.md); coverage method and before/after: [`CODE_BRANCH_COVERAGE_REPORT.md`](CODE_BRANCH_COVERAGE_REPORT.md); live checks on a running instance: [`SYSTEM_TEST_REPORT.md`](SYSTEM_TEST_REPORT.md).
 
 The cases below are the ten specifications from Test Plan §5.2. "Executed" records what was
 actually run; the automated suite is executed by GitHub Actions on every pull request.

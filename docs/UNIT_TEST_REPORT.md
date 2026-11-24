@@ -2,8 +2,8 @@
 
 All automated tests live in `backend/tests/` and run with `cd backend && npm test`
 (Jest 29 + Supertest, `--runInBand`, against a real PostgreSQL (18.6 locally for this run, 16 in CI); CI runs the same command on every
-pull request). The suite is **116 tests in 12 files, 116 passed** on `main` after PRs #36 to #42
-(24 November 2026). The frontend has its own suite of 57 tests; see [`FRONTEND_TEST_REPORT.md`](FRONTEND_TEST_REPORT.md).
+pull request). The suite is **127 tests in 13 files, 127 passed** (24 November 2026, after PR #44).
+The frontend has its own suite of 64 tests; see [`FRONTEND_TEST_REPORT.md`](FRONTEND_TEST_REPORT.md).
 
 "Unit" here means one service or route exercised through its public interface with a real database
 underneath. The payment provider is the built-in deterministic simulator, and in the two
@@ -19,6 +19,7 @@ replaced by a fake that throws, to force driver errors a real server will not pr
 | `availability.test.js` | 3 | 3 | N seats reports N unreserved; sold-out reports zero, never negative; unknown and disabled trips rejected | FR-04 |
 | `booking.test.js` | 4 | 4 | A retried `Idempotency-Key` returns the original booking; 409 once every seat is confirmed; a failed payment releases the hold and creates no confirmed booking; a passenger sees only their own bookings | FR-05, FR-06, NFR-03 |
 | `bookingFailurePaths.test.js` | 16 | 16 | Missing trip id or key; serialization, deadlock and unique-index errors become 409; unrelated driver errors are not disguised; rollback failure does not hide the real error; invalid cancel ids; audit with no actor | FR-05, FR-07, NFR-03, FR-09 |
+| `bookingEligibility.test.js` | 11 | 11 | Only an existing, enabled trip that has not departed can be booked: a disabled or departed trip is 409 `TRIP_NOT_BOOKABLE`, an unknown trip 404, a malformed id 400 (never 500); a retry of an earlier booking still returns it; each refusal is audited | FR-05, UC-01, FR-09 |
 | `cancellation.test.js` | 9 | 9 | Owner cancels before departure and gets a refund reference; seat is released and rebookable; repeat cancel is 409 with no second refund; cancel after departure is 409 and the booking stays confirmed; non-owner cannot cancel; unknown or malformed ids are 404 and unauthenticated calls 401; a failed refund is recorded but the booking stays cancelled; two concurrent cancels give one success and one refund; every outcome is audited | FR-07, SEC-01, FR-09 |
 | `cancellationRecord.test.js` | 5 | 5 | Cancellation stores its time and the refund reference on the booking; history returns them; a failed refund stores no reference but still logs the attempt; rejected or repeated cancels leave the record untouched; other passengers never see it | FR-07, FR-06, SEC-01 |
 | `admin.test.js` | 19 | 19 | Passenger gets 403 on every admin route; create, edit, disable; capacity cannot shrink below a confirmed seat; audit trail; 20 simultaneous bookings confirm exactly one; field validation and trimming | FR-08, FR-09, SEC-01, NFR-03 |
@@ -26,10 +27,10 @@ replaced by a fake that throws, to force driver errors a real server will not pr
 | `lockoutWindow.test.js` | 17 | 17 | Five failures inside any 15-minute span lock the account (sliding window, including a burst across the boundary); older failures do not count; the lock lasts 15 minutes and then ends cleanly; guesses while locked change nothing; eight parallel guesses lock exactly once; no password in audit rows | SEC-04, FR-09 |
 | `security.test.js` | 5 | 5 | Expired session rejected; token valid before expiry and rejected after sign-out (replay); missing or malformed token rejected without detail; access control enforced on the server; no password in responses or audit rows | SEC-01, SEC-02, SEC-03 |
 | `migration.test.js` | 2 | 2 | Demo seed never promotes an existing passenger who owns the admin email; creates the demo admin only when the email is absent | SEC-01, FR-01 |
-| **Total** | **116** | **116** | | |
+| **Total** | **127** | **127** | | |
 
-Coverage of this suite on `main` after the merges: **98.07 % statements, 94.14 % branches** (916 / 934
-statements, 241 / 256 branches; `npm run test:coverage`). The before-and-after measurement for the 37
+Coverage of this suite after PR #44: **98.12 % statements, 94.56 % branches** (942 / 960
+statements, 261 / 276 branches; `npm run test:coverage`). The before-and-after measurement for the 37
 failure-path tests is in [`CODE_BRANCH_COVERAGE_REPORT.md`](CODE_BRANCH_COVERAGE_REPORT.md).
 
 ## Traceability to the ten test cases
@@ -41,7 +42,7 @@ The ten cases in Test Plan §5.2 map to these files; see
 |---|---|
 | TC-01, TC-02 | `auth.test.js`, `lockoutWindow.test.js` |
 | TC-03 | `search.test.js`, `availability.test.js` |
-| TC-04, TC-05 | `booking.test.js`, `bookingFailurePaths.test.js` |
+| TC-04, TC-05 | `booking.test.js`, `bookingFailurePaths.test.js`, `bookingEligibility.test.js` |
 | TC-06 | `cancellation.test.js`, `cancellationRecord.test.js` |
 | TC-07, TC-08 | `admin.test.js` |
 | TC-09 | `security.test.js`, `migration.test.js` (HTTPS part is not a unit test; see the execution report) |

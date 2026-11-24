@@ -118,7 +118,7 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
 async function listForUser(userId) {
   const { rows } = await pool.query(
     `SELECT b.id, b.pnr, b.status, t.train_number, t.origin, t.destination, t.departure_utc,
-            t.fare, s.seat_number
+            t.fare, s.seat_number, b.cancelled_utc, b.refund_reference
      FROM bookings b
      JOIN trips t ON t.id = b.trip_id
      JOIN seats s ON s.id = b.seat_id
@@ -171,8 +171,14 @@ async function cancel({ userId, bookingId, requestId }) {
       throw new AppError(409, 'CANCELLATION_TOO_LATE', 'The train has already departed; cancellation is not allowed.');
     }
 
-    await client.query("UPDATE bookings SET status = 'cancelled' WHERE id = $1", [id]);
     const refund = paymentSimulator.refund(booking.pnr);
+    // The reference is stored on the booking only when the refund went through, so a passenger's
+    // history never shows a reference for money that was not refunded. The payment event below
+    // records the attempt either way.
+    await client.query(
+      "UPDATE bookings SET status = 'cancelled', cancelled_utc = now(), refund_reference = $2 WHERE id = $1",
+      [id, refund.status === 'success' ? refund.reference : null]
+    );
     await client.query(
       'INSERT INTO payment_events (booking_id, kind, status, reference) VALUES ($1, $2, $3, $4)',
       [id, 'refund', refund.status, refund.reference]

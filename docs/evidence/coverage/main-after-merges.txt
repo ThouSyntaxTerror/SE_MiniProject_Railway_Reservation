@@ -1,0 +1,40 @@
+Run on main after PRs #36 to #43 (24 November 2026), npm run test:coverage, Node v24.22.1, PostgreSQL 18.6 local.
+> rrs-backend@1.0.0 test:coverage
+> jest --runInBand --coverage
+------------------------|---------|----------|---------|---------|-------------------
+File                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------------|---------|----------|---------|---------|-------------------
+All files               |   98.07 |    94.14 |   94.28 |   98.07 |                   
+ src                    |      90 |       90 |   83.33 |      90 |                   
+  app.js                |     100 |      100 |     100 |     100 |                   
+  paymentSimulator.js   |     100 |      100 |     100 |     100 |                   
+  server.js             |       0 |        0 |       0 |       0 | 1-6               
+ src/db                 |   83.78 |    54.54 |      50 |   83.78 |                   
+  migrate.js            |   81.81 |       60 |      50 |   81.81 | 6-12,60-64        
+  pool.js               |     100 |        0 |     100 |     100 | 5                 
+ src/middleware         |     100 |      100 |     100 |     100 |                   
+  auth.js               |     100 |      100 |     100 |     100 |                   
+  errors.js             |     100 |      100 |     100 |     100 |                   
+ src/routes             |     100 |      100 |     100 |     100 |                   
+  admin.js              |     100 |      100 |     100 |     100 |                   
+  auth.js               |     100 |      100 |     100 |     100 |                   
+  bookings.js           |     100 |      100 |     100 |     100 |                   
+  trips.js              |     100 |      100 |     100 |     100 |                   
+ src/services           |     100 |    95.23 |     100 |     100 |                   
+  adminService.js       |     100 |    96.15 |     100 |     100 | 109,171,203       
+  auditService.js       |     100 |      100 |     100 |     100 |                   
+  authService.js        |     100 |    91.66 |     100 |     100 | 8,33,60,109       
+  bookingService.js     |     100 |    95.91 |     100 |     100 | 112,199           
+  trainSearchService.js |     100 |      100 |     100 |     100 |                   
+------------------------|---------|----------|---------|---------|-------------------
+=============================== Coverage summary ===============================
+Statements   : 98.07% ( 916/934 )
+Branches     : 94.14% ( 241/256 )
+Functions    : 94.28% ( 33/35 )
+Lines        : 98.07% ( 916/934 )
+================================================================================
+Test Suites: 12 passed, 12 total
+Tests:       116 passed, 116 total
+Snapshots:   0 total
+Time:        25.473 s
+Ran all test suites.

@@ -7,7 +7,19 @@ The frontend is measured separately with Vitest in [`FRONTEND_TEST_REPORT.md`](F
 (PR #42: 57 tests, 99.42 % statements, 94.57 % branches); before that PR it had no automated tests and
 relied on the keyboard and browser matrix in [`evidence/nfr05-nfr06/RESULTS.md`](evidence/nfr05-nfr06/RESULTS.md).
 
-## Result
+## Current figures (`main` after PRs #36 to #43)
+
+| Suite | Tests | Statements | Branches | Functions | Raw output |
+|---|---|---|---|---|---|
+| Backend (Jest) | 116 passed, 12 files | **98.07 %** (916 / 934) | **94.14 %** (241 / 256) | 94.28 % | [`evidence/coverage/main-after-merges.txt`](evidence/coverage/main-after-merges.txt) |
+| Frontend (Vitest) | 57 passed, 5 files | **99.42 %** (861 / 866) | **94.57 %** (209 / 221) | 98.68 % | [`evidence/frontend-tests/vitest-coverage.txt`](evidence/frontend-tests/vitest-coverage.txt) |
+
+The backend branch figure is slightly below the 94.51 % measured when the failure-path tests were
+added, because the later lockout and cancellation changes (#39, #40) added new branches as well as
+the tests for them; every route and service is still at 100 % statements and lines. The sections
+below record how the backend figure was raised from 85 % in the first place.
+
+## Result of the failure-path work (PR #36)
 
 | Measure | Before | After | Change |
 |---|---|---|---|
@@ -31,7 +43,7 @@ npm run test:coverage        # text table, summary and an HTML/lcov report in ba
 `test:coverage` runs the same `jest --runInBand` suite as `npm test` with coverage switched on;
 the settings live in the `jest` block of `backend/package.json`.
 
-## Per-file coverage after the new tests
+## Per-file coverage after the new tests (PR #36 run)
 
 | File | Statements | Branches | Functions | Lines | Not covered |
 |---|---|---|---|---|---|
@@ -53,6 +65,12 @@ the settings live in the `jest` block of `backend/package.json`.
 | `services/trainSearchService.js` | 100 | 100 | 100 | 100 | |
 
 Every route and every service now has 100 % statement and line coverage.
+
+On `main` today two of these rows have moved because #39 and #40 changed those files:
+`authService.js` is at 91.66 % branches (not taken: the bcrypt-cost default at line 8, the `|| []`
+fallback for a row with no failure list at 33, a `finally` at 60, and the empty-password default
+at 109) and `bookingService.js` at 95.91 % (`finally` blocks at 112 and 199). Statements and lines
+are still 100 % for both.
 
 ## What was added, and why
 

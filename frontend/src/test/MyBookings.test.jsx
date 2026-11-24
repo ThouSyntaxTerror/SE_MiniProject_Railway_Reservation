@@ -68,6 +68,22 @@ describe('My bookings', () => {
     ]);
   });
 
+  test('a cancelled booking shows its stored refund reference, so it survives a reload (FR-07)', async () => {
+    fakeApi({
+      'GET /bookings': () => [200, [
+        CONFIRMED,
+        { ...CANCELLED, refund_reference: 'RFND-BBBB2222', cancelled_utc: '2026-11-24T06:00:00.000Z' },
+        { ...CANCELLED, id: 3, pnr: 'CCCC3333', refund_reference: null }, // refund failed: no reference
+      ]],
+    });
+    render(<MyBookings />);
+
+    const rows = await screen.findAllByRole('row');
+    expect(within(rows[2]).getByText('Refund RFND-BBBB2222')).toBeInTheDocument();
+    expect(within(rows[3]).queryByText(/Refund/)).not.toBeInTheDocument();
+    expect(within(rows[1]).queryByText(/Refund/)).not.toBeInTheDocument();
+  });
+
   test('a rejected cancellation shows the server message and keeps the booking', async () => {
     fakeApi({
       'GET /bookings': () => [200, [CONFIRMED]],

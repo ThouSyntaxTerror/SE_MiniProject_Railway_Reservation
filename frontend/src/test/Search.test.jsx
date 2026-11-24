@@ -4,6 +4,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import Search from '../pages/Search.jsx';
+import { timeZoneLabel } from '../time.js';
 import { fakeApi } from './fakeApi.js';
 
 // Departure times are built in local time so the time-of-day filter is predictable.
@@ -79,6 +80,14 @@ describe('search', () => {
     expect(screen.getByText('30 seats left')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^Sold out train 33333/ })).toBeDisabled();
     expect(screen.getByRole('button', { name: /^Book train 22222/ })).toBeEnabled();
+  });
+
+  test('says which time zone the departure and arrival times are in (SRS §2.4)', async () => {
+    api();
+    renderSearch();
+    await search();
+
+    expect(screen.getByText(`Times shown in ${timeZoneLabel()}`)).toBeInTheDocument();
   });
 
   test('the swap button exchanges origin and destination', async () => {

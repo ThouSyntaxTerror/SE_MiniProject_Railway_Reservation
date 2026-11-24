@@ -8,6 +8,58 @@ const SESSION_TTL_MS = 30 * 60 * 1000; // SEC-03: 30 min inactivity expiry
 const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS || 12);
 const MAX_FAILED_ATTEMPTS = 5; // SEC-04
 const LOCKOUT_MS = 15 * 60 * 1000;
+const FAILURE_WINDOW_MS = 15 * 60 * 1000; // SEC-04: failures only count while they are this recent
+
+// SEC-04: count a failed attempt against `userId` and lock the account when the fifth failure falls
+// inside one 15-minute window. The window starts at the first failure and does not slide, so five
+// failures spread over days never lock an account. The row is locked for the read-modify-write, so
+// simultaneous wrong guesses are counted one by one and the lock is applied exactly once. Every
+// comparison uses the database clock, the same one that stamps `locked_until`.
+async function recordFailedAttempt(userId) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      `SELECT failed_attempts, failed_window_start, locked_until, now() AS db_now
+       FROM users WHERE id = $1 FOR UPDATE`,
+      [userId]
+    );
+    const row = rows[0];
+    if (!row || (row.locked_until && row.locked_until > row.db_now)) {
+      await client.query('COMMIT'); // already locked: further guesses change nothing
+      return { locked: false };
+    }
+    const windowExpired =
+      !row.failed_window_start || row.db_now - row.failed_window_start >= FAILURE_WINDOW_MS;
+    const count = windowExpired ? 1 : row.failed_attempts + 1;
+    if (count >= MAX_FAILED_ATTEMPTS) {
+      await client.query(
+        `UPDATE users
+         SET failed_attempts = 0, failed_window_start = NULL,
+             locked_until = now() + ($2 || ' milliseconds')::interval
+         WHERE id = $1`,
+        [userId, String(LOCKOUT_MS)]
+      );
+      await client.query('COMMIT');
+      return { locked: true };
+    }
+    await client.query(
+      'UPDATE users SET failed_attempts = $2, failed_window_start = $3 WHERE id = $1',
+      [userId, count, windowExpired ? row.db_now : row.failed_window_start]
+    );
+    await client.query('COMMIT');
+    return { locked: false };
+  } catch (err) {
+    try {
+      await client.query('ROLLBACK');
+    } catch {
+      // connection already broken; the original error is the one worth reporting
+    }
+    throw err;
+  } finally {
+    client.release();
+  }
+}
 
 // FR-01: unique email, name, password >= 12 chars. Rejects a missing name, an 11-char password
 // or a duplicate email without creating an account.
@@ -35,13 +87,16 @@ async function register({ name, email, password, requestId }) {
 }
 
 // FR-02: generic error on bad credentials, never reveals whether the account exists.
-// SEC-04: five failures in 15 minutes lock the account for 15 minutes.
+// SEC-04: five failures within one 15-minute window lock the account for 15 minutes.
 async function login({ email, password, requestId }) {
   const normalizedEmail = (email || '').trim().toLowerCase();
-  const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [normalizedEmail]);
+  const { rows } = await pool.query(
+    'SELECT *, (locked_until IS NOT NULL AND locked_until > now()) AS is_locked FROM users WHERE email = $1',
+    [normalizedEmail]
+  );
   const user = rows[0];
 
-  if (user?.locked_until && new Date(user.locked_until) > new Date()) {
+  if (user?.is_locked) {
     await auditService.record(pool, { actorId: user.id, action: 'login', outcome: 'locked', requestId });
     throw new AppError(
       429,
@@ -53,14 +108,7 @@ async function login({ email, password, requestId }) {
   const valid = user ? await bcrypt.compare(password || '', user.password_hash) : false;
   if (!valid) {
     if (user) {
-      const locked = user.failed_attempts + 1 >= MAX_FAILED_ATTEMPTS;
-      await pool.query(
-        `UPDATE users
-         SET failed_attempts = CASE WHEN $1 THEN 0 ELSE failed_attempts + 1 END,
-             locked_until = CASE WHEN $1 THEN now() + interval '15 minutes' ELSE locked_until END
-         WHERE id = $2`,
-        [locked, user.id]
-      );
+      const { locked } = await recordFailedAttempt(user.id);
       if (locked) {
         await auditService.record(pool, { actorId: user.id, action: 'account_lockout', outcome: 'locked', requestId });
       }
@@ -69,7 +117,7 @@ async function login({ email, password, requestId }) {
     throw new AppError(401, 'INVALID_CREDENTIALS', 'Invalid email or password.');
   }
 
-  await pool.query('UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE id = $1', [user.id]);
+  await pool.query('UPDATE users SET failed_attempts = 0, failed_window_start = NULL, locked_until = NULL WHERE id = $1', [user.id]);
   const token = crypto.randomBytes(32).toString('hex');
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
   await pool.query('INSERT INTO sessions (token, user_id, expires_at) VALUES ($1, $2, $3)', [
@@ -105,4 +153,4 @@ async function verifySession(token) {
   return { id: session.user_id, name: session.name, email: session.email, role: session.role };
 }
 
-module.exports = { register, login, logout, verifySession };
+module.exports = { register, login, logout, verifySession, recordFailedAttempt };

@@ -1,7 +1,7 @@
 # Unit and integration test report — Team E15
 
 All automated tests live in `backend/tests/` and run with `cd backend && npm test`
-(Jest 29 + Supertest, `--runInBand`, against a real PostgreSQL 16; CI runs the same command on every
+(Jest 29 + Supertest, `--runInBand`, against a real PostgreSQL (18.6 locally for this run, 16 in CI); CI runs the same command on every
 pull request). The suite is **94 tests in 10 files, 94 passed**, run on 24 November 2026.
 
 "Unit" here means one service or route exercised through its public interface with a real database

@@ -1,7 +1,8 @@
 # Code and branch coverage report — Team E15
 
 Measured on the backend (`backend/src`), the code that holds every business rule. Run on
-24 November 2026 with Node 26, PostgreSQL 16 and Jest 29 using the V8 coverage provider.
+24 November 2026 with Node 24.22.1, PostgreSQL 18.6 (a local embedded server; CI uses PostgreSQL 16)
+and Jest 29 using the V8 coverage provider.
 The frontend has no automated unit tests; it is covered by the manual keyboard and browser matrix
 in [`evidence/nfr05-nfr06/RESULTS.md`](evidence/nfr05-nfr06/RESULTS.md).
 

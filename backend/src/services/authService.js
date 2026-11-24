@@ -10,17 +10,18 @@ const MAX_FAILED_ATTEMPTS = 5; // SEC-04
 const LOCKOUT_MS = 15 * 60 * 1000;
 const FAILURE_WINDOW_MS = 15 * 60 * 1000; // SEC-04: failures only count while they are this recent
 
-// SEC-04: count a failed attempt against `userId` and lock the account when the fifth failure falls
-// inside one 15-minute window. The window starts at the first failure and does not slide, so five
-// failures spread over days never lock an account. The row is locked for the read-modify-write, so
-// simultaneous wrong guesses are counted one by one and the lock is applied exactly once. Every
-// comparison uses the database clock, the same one that stamps `locked_until`.
+// SEC-04: record a failed attempt against `userId` and lock the account when five failures fall
+// inside ANY 15-minute span. The times of recent failures are kept on the row and those older than
+// 15 minutes are dropped on every attempt, so this is a sliding window: a burst that straddles a
+// boundary is caught, and failures spread over days never add up. The row is locked for the
+// read-modify-write, so simultaneous wrong guesses are counted one by one and the lock is applied
+// exactly once. Every comparison uses the database clock, the same one that stamps `locked_until`.
 async function recordFailedAttempt(userId) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const { rows } = await client.query(
-      `SELECT failed_attempts, failed_window_start, locked_until, now() AS db_now
+      `SELECT recent_failures, locked_until, now() AS db_now
        FROM users WHERE id = $1 FOR UPDATE`,
       [userId]
     );
@@ -29,13 +30,13 @@ async function recordFailedAttempt(userId) {
       await client.query('COMMIT'); // already locked: further guesses change nothing
       return { locked: false };
     }
-    const windowExpired =
-      !row.failed_window_start || row.db_now - row.failed_window_start >= FAILURE_WINDOW_MS;
-    const count = windowExpired ? 1 : row.failed_attempts + 1;
-    if (count >= MAX_FAILED_ATTEMPTS) {
+    const recent = (row.recent_failures || [])
+      .filter((t) => row.db_now - t < FAILURE_WINDOW_MS)
+      .concat([row.db_now]);
+    if (recent.length >= MAX_FAILED_ATTEMPTS) {
       await client.query(
         `UPDATE users
-         SET failed_attempts = 0, failed_window_start = NULL,
+         SET failed_attempts = 0, recent_failures = '{}',
              locked_until = now() + ($2 || ' milliseconds')::interval
          WHERE id = $1`,
         [userId, String(LOCKOUT_MS)]
@@ -44,8 +45,8 @@ async function recordFailedAttempt(userId) {
       return { locked: true };
     }
     await client.query(
-      'UPDATE users SET failed_attempts = $2, failed_window_start = $3 WHERE id = $1',
-      [userId, count, windowExpired ? row.db_now : row.failed_window_start]
+      'UPDATE users SET failed_attempts = $2, recent_failures = $3 WHERE id = $1',
+      [userId, recent.length, recent]
     );
     await client.query('COMMIT');
     return { locked: false };
@@ -87,7 +88,7 @@ async function register({ name, email, password, requestId }) {
 }
 
 // FR-02: generic error on bad credentials, never reveals whether the account exists.
-// SEC-04: five failures within one 15-minute window lock the account for 15 minutes.
+// SEC-04: five failures within any 15-minute span lock the account for 15 minutes.
 async function login({ email, password, requestId }) {
   const normalizedEmail = (email || '').trim().toLowerCase();
   const { rows } = await pool.query(
@@ -117,7 +118,7 @@ async function login({ email, password, requestId }) {
     throw new AppError(401, 'INVALID_CREDENTIALS', 'Invalid email or password.');
   }
 
-  await pool.query('UPDATE users SET failed_attempts = 0, failed_window_start = NULL, locked_until = NULL WHERE id = $1', [user.id]);
+  await pool.query("UPDATE users SET failed_attempts = 0, recent_failures = '{}', locked_until = NULL WHERE id = $1", [user.id]);
   const token = crypto.randomBytes(32).toString('hex');
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
   await pool.query('INSERT INTO sessions (token, user_id, expires_at) VALUES ($1, $2, $3)', [

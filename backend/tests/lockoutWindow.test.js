@@ -20,7 +20,7 @@ const right = () =>
 
 async function state() {
   const { rows } = await pool.query(
-    `SELECT failed_attempts, failed_window_start, locked_until,
+    `SELECT failed_attempts, recent_failures, locked_until,
             (locked_until > now()) AS is_locked
      FROM users WHERE email = $1`,
     [USER.email]
@@ -28,10 +28,11 @@ async function state() {
   return rows[0];
 }
 
-// Pretend `minutes` have passed since the current failure window opened.
+// Pretend `minutes` have passed: move every recorded failure that far into the past.
 async function ageWindow(minutes) {
   await pool.query(
-    `UPDATE users SET failed_window_start = failed_window_start - ($2 || ' minutes')::interval
+    `UPDATE users
+     SET recent_failures = ARRAY(SELECT t - ($2 || ' minutes')::interval FROM unnest(recent_failures) AS t)
      WHERE email = $1`,
     [USER.email, String(minutes)]
   );
@@ -87,6 +88,22 @@ describe('failure window (SEC-04)', () => {
     expect((await right()).status).toBe(200);
   });
 
+  test('a burst that straddles the 15-minute mark is still caught (sliding, not fixed, window)', async () => {
+    await wrong(); // A
+    await ageWindow(14); // A is 14 minutes old
+    for (let i = 1; i <= 3; i++) await wrong(); // B, C, D
+    await ageWindow(1.5); // A is now 15.5 minutes old and drops out; B, C, D are 1.5 minutes old
+
+    await wrong(); // E: B, C, D, E = 4 inside the last 15 minutes
+    expect((await state()).is_locked).toBeFalsy();
+    expect((await state()).failed_attempts).toBe(4);
+
+    await wrong(); // F: five failures inside the last 15 minutes
+    expect((await state()).is_locked).toBe(true);
+    // A window that started at A and reset at 15 minutes would have counted only E and F here,
+    // letting up to eight guesses through in about a minute.
+  });
+
   test('failures just inside the window still count', async () => {
     for (let i = 1; i <= 4; i++) await wrong();
     await ageWindow(14); // 14 minutes later: the window is still open
@@ -98,7 +115,7 @@ describe('failure window (SEC-04)', () => {
   test('a successful sign-in clears the count, so earlier failures do not carry over', async () => {
     for (let i = 1; i <= 4; i++) await wrong();
     expect((await right()).status).toBe(200);
-    expect(await state()).toMatchObject({ failed_attempts: 0, failed_window_start: null });
+    expect(await state()).toMatchObject({ failed_attempts: 0, recent_failures: [] });
 
     for (let i = 1; i <= 4; i++) await wrong();
     expect((await state()).is_locked).toBeFalsy(); // four new failures, not eight
@@ -136,7 +153,7 @@ describe('lock duration (SEC-04)', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.token).toBeTruthy();
-    expect(await state()).toMatchObject({ failed_attempts: 0, failed_window_start: null, locked_until: null });
+    expect(await state()).toMatchObject({ failed_attempts: 0, recent_failures: [], locked_until: null });
   });
 
   test('after the lock expires a wrong password starts a fresh count of one', async () => {

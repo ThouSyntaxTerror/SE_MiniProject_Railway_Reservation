@@ -16,7 +16,7 @@ The ten formal cases and their verdicts are in [`TEST_EXECUTION_REPORT.md`](TEST
 | Build | `main` at `84669d6` (Sprint 2 integration plus the UI redesign) |
 | API | Node 24.22.1, Express, started with `npm start`, `localhost:3000` |
 | UI | React and Vite dev server, `localhost:5173`, driven in headless Chrome by Selenium |
-| Database | PostgreSQL 16, freshly created and seeded with `npm run migrate` |
+| Database | PostgreSQL 18.6 (embedded local server; CI uses 16), freshly created and seeded with `npm run migrate` |
 | Payment | The built-in deterministic simulator (there is no real gateway) |
 | Data | Each run creates its own passengers and a throw-away trip and disables it afterwards |
 

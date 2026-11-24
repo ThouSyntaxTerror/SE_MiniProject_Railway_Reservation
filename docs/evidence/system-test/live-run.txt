@@ -1,4 +1,4 @@
-Command: node scripts/systemTest.js   (Node v24.22.1, run 2026-11-24 12:09, local API on :3000, PostgreSQL 16)
+Command: node scripts/systemTest.js   (Node v24.22.1, run 2026-11-24 12:09, local API on :3000, PostgreSQL 18.6)
 
 System test against http://localhost:3000  (run id mwubr1js)
 

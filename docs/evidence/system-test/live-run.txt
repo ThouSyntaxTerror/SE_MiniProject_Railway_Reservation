@@ -1,0 +1,43 @@
+Command: node scripts/systemTest.js   (Node v24.22.1, run 2026-11-24 12:09, local API on :3000, PostgreSQL 16)
+
+System test against http://localhost:3000  (run id mwubr1js)
+
+PASS  ST-00  API is up
+        GET /health -> 200
+PASS  ST-01  administrator creates a 3-seat trip
+        POST /api/admin/trips -> 201, trip 6
+PASS  TC-02a  unknown email and wrong password give the same 401 and message
+        unknown: 401 "Invalid email or password." | wrong password: 401 "Invalid email or password."
+PASS  TC-02b  five wrong passwords are five 401s
+        statuses: 401, 401, 401, 401, 401
+PASS  TC-02c  sixth attempt is refused with 429 ACCOUNT_LOCKED even with the CORRECT password
+        -> 429 ACCOUNT_LOCKED
+PASS  TC-02d  failed attempts and the lock are in the audit trail
+        audit rows for this user: 9; kinds: account_lockout:locked, login:failure, login:locked, login:success, register:success
+PASS  TC-02e  no password appears anywhere in the audit trail
+PASS  TC-03  search finds the new trip by origin, destination and date
+        GET /api/trips -> 200, 1 result(s)
+PASS  TC-04a  booking returns 201 with a PNR and a seat
+        -> 201, PNR DFF6C9D8, seat 1
+PASS  TC-04b  availability drops by exactly one
+        unreserved 3 -> 2
+PASS  TC-04c  the booking is in the owner's history and not in another passenger's
+PASS  TC-05  the same Idempotency-Key returns the same booking and takes no second seat
+        retry -> booking 4 (original 4); unreserved 2
+PASS  TC-06a  another passenger cannot cancel it: 404 and no PNR in the response
+        -> 404 NOT_FOUND
+PASS  TC-06b  the failed attempt left the booking confirmed
+PASS  TC-06c  the owner cancels and gets the refund reference RFND-<PNR>
+        -> 200, success, RFND-DFF6C9D8
+PASS  TC-06d  the seat is released
+        unreserved back to 3
+PASS  TC-06e  cancelling twice is a 409 and releases no second seat
+        -> 409 ALREADY_CANCELLED; unreserved 3 (capacity 3)
+PASS  TC-06f  the released seat can be booked by someone else
+        -> 201, seat 1
+PASS  SEC-01  no token is 401; a passenger on an administrator route is 403
+        anonymous -> 401; passenger on /api/admin -> 403
+PASS  NFR-03  8 passengers race for the last seat: exactly one wins, the rest get 409, availability is 0
+        201 x1, 409 x7, other x0; unreserved 0
+
+20 passed, 0 failed

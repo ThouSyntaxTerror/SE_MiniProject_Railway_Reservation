@@ -45,7 +45,10 @@ Code written by Affan on `main`, from `git log`: the `cancel` function in `booki
 | #33 | 20 Nov | `ARCHITECTURE.md`: component, sequence and data-model diagrams | +103 | Merged |
 | #36 | 24 Nov | Code and branch coverage report; 37 new failure-path tests (branch coverage 85.29 % → 94.51 %); unit test report; CI keeps the coverage report | open | Awaiting review |
 | #37 | 24 Nov | System test report; 20-check live API script; UI flow script with screenshots | open | Awaiting review |
-| this PR | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Awaiting review |
+| #38 | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Awaiting review |
+| #39 | 24 Nov | SEC-04 fix: count failures inside one 15-minute window, under a row lock, using the database clock (refs #13); 16 tests that move the clock | code + tests | Awaiting review |
+| #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Awaiting review |
+| #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Awaiting review |
 
 On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 assigned issues closed.
 
@@ -57,19 +60,20 @@ On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 as
 | Architecture overview (#33) | The design PDF had no diagram of the system as built |
 | Coverage report and failure-path tests (#36) | The Code and Branch Coverage Report was the one deliverable nobody had produced |
 | System test report (#37) | The automated tests check the code from inside; there was no record of the running product being checked from outside |
-| Design note and traceability (this PR) | Records what the three owned features do and which test covers each SRS clause, including the gaps |
+| Design note and traceability (#38) | Records what the three assigned features do and which test covers each SRS clause, including the gaps |
+| Lockout window (#39), cancellation record (#40) | Fix the two code-versus-SRS gaps the design note found, instead of only recording them |
+| Admin pages matrix (#41) | The NFR-05/06 evidence listed the administrator pages as not covered |
 
 ## 4. Defects found in own work
 
 | ID | Defect | Found by | Fix |
 |---|---|---|---|
 | D-07 | My bookings table overflowed the viewport at 375 px (NFR-06) | The three-browser matrix | `.table-wrap` scroll container, PR #30; re-run clean |
-| none other | Writing the failure-path tests (#36) and the system test (#37) found no functional defect | | |
+| A-01 | Every row of the admin Trips table had buttons named just "Save" and "Disable", so a screen-reader user could not tell which trip each acts on (NFR-05) | The admin-pages matrix | Buttons named per trip, PR #41; 28 of 28 in three browsers |
+| L-01 | Lockout counted consecutive failures instead of failures within 15 minutes (SEC-04), in teammate-written code | Writing the design note | Rolling window, PR #39; the new window tests fail against the old logic |
+| L-02 | `cancelled_utc` and `refund_reference` were never written, so the refund reference vanished after a reload (FR-07) | Writing the design note | Stored and shown, PR #40 |
 
-Two differences between the code and the SRS were found while writing the design note, and are
-recorded rather than hidden (`CANCELLATION_AND_LOCKOUT_DESIGN.md` section 5): the lockout counts
-consecutive failures instead of failures within 15 minutes, and two schema columns for cancellation
-are never written.
+Writing the failure-path tests (#36) and the system test (#37) found no functional defect.
 
 ## 5. Review activity
 
@@ -86,9 +90,9 @@ are never written.
   tests and in the live race check.
 - **What was late.** Failure-path tests and a coverage run came after the features. Starting from the
   coverage gaps earlier would have caught the untested rollback and validation branches sooner.
-- **What is still open.** The lockout wording difference, the NFR-05/06 checks that cover only
-  headless browsers on one machine (no screen reader, no physical phone), and the deployed-HTTPS
-  checks that belong to another team member.
+- **What is still open.** Unknown emails are not rate-limited (no row to count against); the NFR-05/06
+  checks cover headless browsers on one machine only (no screen reader, no physical phone); and the
+  deployed-HTTPS checks belong to another team member. Pull requests #36 to #41 are awaiting review.
 
 ## 7. Links
 

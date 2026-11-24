@@ -8,8 +8,8 @@ SRS without reading the source. Where the code is weaker than the SRS it says so
 
 Authorship, from `git log`: the cancellation feature (section 2) was written by Affan; the booking
 flow (section 1) comes from the Sprint 1 scaffold with a later fix by Rizwan; the lockout (section 3)
-was written by Rizwan. Sections 1 and 3 document and verify that code; they are not claimed as Affan's
-implementation.
+was written by Rizwan, and its 15-minute window fix (PR #39) is Affan's. Sections 1 and 3 otherwise
+document and verify teammates' code; they are not claimed as Affan's implementation.
 
 Sources: `backend/src/services/bookingService.js`, `backend/src/services/authService.js`,
 `backend/src/paymentSimulator.js`, `backend/src/db/schema.sql`.
@@ -94,6 +94,13 @@ login(email, password)
   correct password                  ──►  failed_attempts = 0, locked_until = NULL, create session, audit login:success
 ```
 
+**Failure window (PR #39).** As first written, `failed_attempts` counted consecutive failures with no
+time limit (section 5, item 1). PR #39 adds `failed_window_start`: a failure more than 15 minutes after
+the window opened starts a new window at a count of one, so only five failures *within 15 minutes*
+lock the account, as the SRS says. The count is updated under a row lock (`SELECT … FOR UPDATE`), so
+simultaneous wrong guesses are counted one at a time and lock the account exactly once, and a guess
+that arrives after the lock is set changes nothing. The "is it locked?" check uses the database clock.
+
 - **The lock check comes before the password check**, so the correct password is refused while locked.
   Otherwise an attacker could keep guessing and stop being blocked on a lucky hit.
 - **Unknown email and wrong password return the same 401 and message** (FR-02), so the endpoint does not
@@ -113,18 +120,20 @@ login(email, password)
 
 ## 5. Known limits (not hidden)
 
-1. **The lockout counts consecutive failures, not failures "within 15 minutes".** `failed_attempts` is
-   reset only by a successful sign-in or by locking; it does not expire. Five wrong passwords spread over
-   several days therefore lock the account. This is stricter than the SRS wording, never weaker, so no
-   attack is made easier, but it is a difference. Fixing it needs a timestamp of the first failure in the
-   window; not done.
-2. **Unknown emails are never locked** (there is no row to hold a counter). They also leak nothing, but a
-   password-guessing run against a non-existent email is not slowed.
-3. **Two clocks.** `locked_until` is written with the database clock and compared with the application
-   server's clock. On one machine they agree; on separate hosts a large clock difference would shift the lock.
-4. **Unused columns.** `bookings.cancelled_utc` and `bookings.refund_reference` exist in the schema but
-   no code writes them; the refund reference is held in `payment_events`. Harmless, but they are dead
-   columns.
+Items 1, 3 and 4 were found while writing this note and have since been fixed; they stay listed so
+the history is visible. Until the named pull request is merged, the limit still applies on `main`.
+
+1. **Fixed by PR #39.** The lockout counted consecutive failures, not failures "within 15 minutes":
+   `failed_attempts` was reset only by a successful sign-in or by locking and never expired, so five wrong
+   passwords spread over several days locked the account. Stricter than the SRS, never weaker, but
+   different. PR #39 adds the 15-minute window described in section 3 and tests that move the clock.
+2. **Open.** Unknown emails are never locked (there is no row to hold a counter). They also leak nothing,
+   but a password-guessing run against a non-existent email is not slowed.
+3. **Fixed by PR #39.** Two clocks: `locked_until` was written with the database clock and compared with
+   the application server's clock. The check now uses the database clock too.
+4. **Fixed by PR #40.** `bookings.cancelled_utc` and `bookings.refund_reference` existed in the schema but
+   no code wrote them. Cancellation now stores both (the reference only when the refund succeeded), the
+   history returns them, and My bookings shows the reference after a reload.
 5. **The payment and refund provider is a simulator.** The design isolates it behind one small adapter
    (`paymentSimulator.js`), but real-gateway behaviours such as timeouts and partial refunds are not modelled.
 6. **Retrying an old key after a cancellation returns the cancelled booking**, not a new one. That follows

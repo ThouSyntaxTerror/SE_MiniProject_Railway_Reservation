@@ -2,7 +2,7 @@
 
 A one-page picture of how the running system is put together. It is drawn from the code on `main`
 and complements the formal design document
-[`03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272.pdf`](../03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272.pdf)
+[`03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272_with_Architectural_Diagram.pdf`](../03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272_with_Architectural_Diagram.pdf)
 (Figure 1 there is the layered component view; Figures 2 and 3 are the booking and cancellation sequences).
 
 The diagrams are [Mermaid](https://mermaid.js.org/) and render directly on GitHub.

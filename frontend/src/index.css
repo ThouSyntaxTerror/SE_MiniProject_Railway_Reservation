@@ -394,6 +394,11 @@ tbody tr:hover {
   color: #4a443d;
 }
 
+.tz-note {
+  display: block;
+  margin-top: 0.15rem;
+}
+
 .refund-ref {
   display: block;
   margin-top: 0.3rem;

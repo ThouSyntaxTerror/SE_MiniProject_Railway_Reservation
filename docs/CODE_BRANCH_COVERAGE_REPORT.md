@@ -3,8 +3,9 @@
 Measured on the backend (`backend/src`), the code that holds every business rule. Run on
 24 November 2026 with Node 24.22.1, PostgreSQL 18.6 (a local embedded server; CI uses PostgreSQL 16)
 and Jest 29 using the V8 coverage provider.
-The frontend has no automated unit tests; it is covered by the manual keyboard and browser matrix
-in [`evidence/nfr05-nfr06/RESULTS.md`](evidence/nfr05-nfr06/RESULTS.md).
+The frontend is measured separately with Vitest in [`FRONTEND_TEST_REPORT.md`](FRONTEND_TEST_REPORT.md)
+(PR #42: 57 tests, 99.42 % statements, 94.57 % branches); before that PR it had no automated tests and
+relied on the keyboard and browser matrix in [`evidence/nfr05-nfr06/RESULTS.md`](evidence/nfr05-nfr06/RESULTS.md).
 
 ## Result
 
@@ -80,7 +81,7 @@ not fail on demand, so the new tests inject a fake connection.
 | `db/pool.js` line 5 | The fallback connection string, used only when `DATABASE_URL` is unset. Tests always set it. | No |
 | `authService.js` line 8 | The default bcrypt cost of 12. Tests deliberately set it to 4 for speed (`tests/setupEnv.js`); production uses 12. | Low, noted in `setupEnv.js` |
 | `finally` and default-value branches (`adminService`, `bookingService`) | V8 counts the implicit "no exception" path of a `finally` as a branch. Both outcomes of the `try` are exercised by the tests above. | No |
-| Frontend (`frontend/src`) | No unit-test framework in the project; covered by the manual matrix instead. | Accepted gap |
+| Frontend (`frontend/src`) | Not measured by Jest. Covered by its own Vitest suite (PR #42, see `FRONTEND_TEST_REPORT.md`) and the browser matrices. | None once #42 is merged |
 
 ## What coverage does and does not prove
 

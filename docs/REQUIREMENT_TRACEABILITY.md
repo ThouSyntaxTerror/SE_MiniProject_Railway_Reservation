@@ -1,6 +1,6 @@
 # Requirement traceability — Team E15
 
-Every SRS identifier → implementation → test → status. Suite: 55 automated tests on the merged stack, all passing.
+Every SRS identifier → implementation → test → status. Suite on `main` (24 November 2026): 116 backend tests and 57 frontend tests, all passing (it was 55 backend tests when this table was first written).
 
 ## Functional requirements
 
@@ -12,7 +12,7 @@ Every SRS identifier → implementation → test → status. Suite: 55 automated
 | FR-04 | `services/trainSearchService.js` (`availability`) | `availability.test.js` | Met |
 | FR-05 | `services/bookingService.js` (`book`), `paymentSimulator.js` | `booking.test.js` booking group | Met |
 | FR-06 | `services/bookingService.js` (`listForUser`), `pages/MyBookings.jsx` | `booking.test.js` history case | Met |
-| FR-07 | `services/bookingService.js` (`cancel`), `routes/bookings.js` | `cancellation.test.js` (9 tests) | Met |
+| FR-07 | `services/bookingService.js` (`cancel`), `routes/bookings.js` | `cancellation.test.js` (9 tests), `cancellationRecord.test.js` (5) | Met |
 | FR-08 | `services/adminService.js`, `routes/admin.js`, `pages/Admin.jsx` | `admin.test.js` | Met |
 | FR-09 | `services/auditService.js`, all services, `GET /api/admin/audit` | `auth.test.js`, `booking.test.js`, `admin.test.js` | Met |
 
@@ -34,7 +34,7 @@ Every SRS identifier → implementation → test → status. Suite: 55 automated
 | SEC-01 | `requireRole('admin')`, ownership check in `cancel`, passenger-scoped history | `admin.test.js`, `booking.test.js`, `security.test.js` | Met |
 | SEC-02 | bcryptjs adaptive salted hash (12 rounds), no password in response/audit | `auth.test.js`, `security.test.js` | Met |
 | SEC-03 | 30-minute sliding session, delete on sign-out, Caddy TLS config | `security.test.js`, `docs/HTTPS_DEPLOYMENT.md` | Met (HTTPS verified in demo) |
-| SEC-04 | `failed_attempts`, `locked_until`, 429, audit without password | `auth.test.js` lockout group | Met |
+| SEC-04 | `failed_attempts`, `locked_until`, 429, audit without password | `auth.test.js` lockout group, `lockoutWindow.test.js` (17: sliding 15-minute window, lock expiry) | Met |
 
 ## Test Plan §5.2 coverage
 

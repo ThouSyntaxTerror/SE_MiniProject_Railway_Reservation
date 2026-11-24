@@ -57,7 +57,12 @@ export default function MyBookings() {
                 </td>
                 <td>{b.seat_number}</td>
                 <td>{b.fare}</td>
-                <td><span className={`badge badge-${b.status}`}>{b.status}</span></td>
+                <td>
+                  <span className={`badge badge-${b.status}`}>{b.status}</span>
+                  {b.refund_reference && (
+                    <span className="refund-ref">Refund {b.refund_reference}</span>
+                  )}
+                </td>
                 <td>
                   {b.status === 'confirmed' && (
                     <button type="button" className="btn-danger" onClick={() => handleCancel(b)} aria-label={`Cancel booking ${b.pnr}`}>

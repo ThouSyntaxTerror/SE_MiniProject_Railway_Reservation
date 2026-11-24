@@ -394,6 +394,13 @@ tbody tr:hover {
   color: #4a443d;
 }
 
+.refund-ref {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

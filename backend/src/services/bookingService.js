@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const pool = require('../db/pool');
 const paymentSimulator = require('../paymentSimulator');
+const { parseId } = require('../ids');
 const auditService = require('./auditService');
 const { AppError } = require('../middleware/errors');
 
@@ -28,8 +29,8 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
   if (!tripId || !idempotencyKey) {
     throw new AppError(400, 'VALIDATION_ERROR', 'tripId and an Idempotency-Key header are required.');
   }
-  const trip = Number(tripId);
-  if (!Number.isInteger(trip) || trip <= 0) {
+  const trip = parseId(tripId);
+  if (trip === null) {
     throw new AppError(400, 'VALIDATION_ERROR', 'tripId must be a positive whole number.');
   }
   const client = await pool.connect();
@@ -159,8 +160,8 @@ async function listForUser(userId) {
 // checked, then status flips to 'cancelled' — which frees the seat because the partial unique index
 // only constrains confirmed bookings. A refund failure is recorded but never restores the booking.
 async function cancel({ userId, bookingId, requestId }) {
-  const id = Number(bookingId);
-  if (!Number.isInteger(id) || id <= 0) {
+  const id = parseId(bookingId);
+  if (id === null) {
     throw new AppError(404, 'NOT_FOUND', 'Booking not found.');
   }
   const client = await pool.connect();

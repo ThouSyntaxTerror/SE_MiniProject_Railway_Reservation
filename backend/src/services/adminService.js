@@ -1,13 +1,14 @@
 const pool = require('../db/pool');
 const auditService = require('./auditService');
 const { AppError } = require('../middleware/errors');
+const { parseId } = require('../ids');
 
 const TRIP_FIELDS = ['train_number', 'origin', 'destination', 'departure_utc', 'arrival_utc', 'fare', 'capacity'];
 const REQUIRED_FIELDS = [...TRIP_FIELDS];
 
 function parseTripId(tripId) {
-  const id = Number(tripId);
-  if (!Number.isInteger(id) || id <= 0) {
+  const id = parseId(tripId);
+  if (id === null) {
     throw new AppError(404, 'TRIP_NOT_FOUND', 'Trip not found.');
   }
   return id;

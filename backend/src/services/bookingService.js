@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const pool = require('../db/pool');
 const paymentSimulator = require('../paymentSimulator');
+const { parseId } = require('../ids');
 const auditService = require('./auditService');
 const { AppError } = require('../middleware/errors');
 
@@ -28,6 +29,10 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
   if (!tripId || !idempotencyKey) {
     throw new AppError(400, 'VALIDATION_ERROR', 'tripId and an Idempotency-Key header are required.');
   }
+  const trip = parseId(tripId);
+  if (trip === null) {
+    throw new AppError(400, 'VALIDATION_ERROR', 'tripId must be a positive whole number.');
+  }
   const client = await pool.connect();
   let committed = false;
   try {
@@ -43,6 +48,28 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
       return fetchBookingView(pool, existing.rows[0].id);
     }
 
+    // SRS UC-01 precondition and FR-05: only an existing, enabled trip that has not yet departed can
+    // be booked. FOR SHARE keeps an administrator from disabling the trip while this booking is in
+    // flight; it does not block other bookings, which take the same shared lock. Departure is judged
+    // by the database clock, as cancellation does.
+    const tripResult = await client.query(
+      'SELECT enabled, (departure_utc <= now()) AS departed FROM trips WHERE id = $1 FOR SHARE',
+      [trip]
+    );
+    const tripRow = tripResult.rows[0];
+    if (!tripRow || !tripRow.enabled || tripRow.departed) {
+      const outcome = !tripRow ? 'trip_not_found' : tripRow.departed ? 'trip_departed' : 'trip_disabled';
+      await auditService.record(client, { actorId: userId, action: 'booking', outcome, requestId });
+      await client.query('COMMIT');
+      committed = true;
+      if (!tripRow) throw new AppError(404, 'TRIP_NOT_FOUND', 'Trip not found.');
+      throw new AppError(
+        409,
+        'TRIP_NOT_BOOKABLE',
+        tripRow.departed ? 'This train has already departed.' : 'This trip is not open for booking.'
+      );
+    }
+
     // SKIP LOCKED lets concurrent requests pick different seats instead of queuing; the partial
     // unique index on confirmed bookings (schema.sql) is still the final guard against a double
     // allocation if two transactions somehow target the same seat (NFR-03).
@@ -53,7 +80,7 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
        ORDER BY s.seat_number
        FOR UPDATE OF s SKIP LOCKED
        LIMIT 1`,
-      [tripId]
+      [trip]
     );
     const seat = seatResult.rows[0];
     if (!seat) {
@@ -79,7 +106,7 @@ async function book({ userId, tripId, idempotencyKey, requestId }) {
       `INSERT INTO bookings (pnr, user_id, trip_id, seat_id, status, idempotency_key)
        VALUES ($1, $2, $3, $4, 'confirmed', $5)
        RETURNING id`,
-      [generatePnr(), userId, tripId, seat.id, idempotencyKey]
+      [generatePnr(), userId, trip, seat.id, idempotencyKey]
     );
     const bookingId = rows[0].id;
     await client.query(
@@ -133,8 +160,8 @@ async function listForUser(userId) {
 // checked, then status flips to 'cancelled' — which frees the seat because the partial unique index
 // only constrains confirmed bookings. A refund failure is recorded but never restores the booking.
 async function cancel({ userId, bookingId, requestId }) {
-  const id = Number(bookingId);
-  if (!Number.isInteger(id) || id <= 0) {
+  const id = parseId(bookingId);
+  if (id === null) {
     throw new AppError(404, 'NOT_FOUND', 'Booking not found.');
   }
   const client = await pool.connect();

@@ -198,6 +198,13 @@ describe('registration page (FR-01)', () => {
     });
   });
 
+  test('says that every field is required (SRS §3.1)', () => {
+    quietApi();
+    renderAt('/register');
+
+    expect(screen.getByText('All fields are required.')).toBeInTheDocument();
+  });
+
   test('shows the server\'s reason when registration is refused', async () => {
     quietApi({ 'POST /register': () => [409, { code: 'EMAIL_TAKEN', message: 'An account with this email already exists.' }] });
     renderAt('/register');

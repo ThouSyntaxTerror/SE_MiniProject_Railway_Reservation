@@ -4,10 +4,22 @@ Measured on the backend (`backend/src`), the code that holds every business rule
 24 November 2026 with Node 24.22.1, PostgreSQL 18.6 (a local embedded server; CI uses PostgreSQL 16)
 and Jest 29 using the V8 coverage provider.
 The frontend is measured separately with Vitest in [`FRONTEND_TEST_REPORT.md`](FRONTEND_TEST_REPORT.md)
-(PR #42: 57 tests, 99.42 % statements, 94.57 % branches); before that PR it had no automated tests and
+(64 tests after PR #44: 99.44 % statements, 94.24 % branches); before PR #42 it had no automated tests and
 relied on the keyboard and browser matrix in [`evidence/nfr05-nfr06/RESULTS.md`](evidence/nfr05-nfr06/RESULTS.md).
 
-## Result
+## Current figures (after PR #44)
+
+| Suite | Tests | Statements | Branches | Functions | Raw output |
+|---|---|---|---|---|---|
+| Backend (Jest) | 185 passed, 14 files | **98.18 %** (976 / 994) | **94.82 %** (275 / 290) | 94.44 % | [`evidence/coverage/main-after-merges.txt`](evidence/coverage/main-after-merges.txt) |
+| Frontend (Vitest) | 64 passed, 6 files | **99.44 %** (891 / 896) | **94.24 %** (213 / 226) | 98.71 % | [`evidence/frontend-tests/vitest-coverage.txt`](evidence/frontend-tests/vitest-coverage.txt) |
+
+The lockout, cancellation-record and booking-eligibility changes (#39, #40, #44) added new branches
+together with the tests for them, so the backend figure moved from the 94.51 % measured in #36 to
+94.82 % (the new `ids.js` is at 100 %); every route and service is still at 100 % statements and lines. The sections
+below record how the backend figure was raised from 85 % in the first place.
+
+## Result of the failure-path work (PR #36)
 
 | Measure | Before | After | Change |
 |---|---|---|---|
@@ -31,7 +43,7 @@ npm run test:coverage        # text table, summary and an HTML/lcov report in ba
 `test:coverage` runs the same `jest --runInBand` suite as `npm test` with coverage switched on;
 the settings live in the `jest` block of `backend/package.json`.
 
-## Per-file coverage after the new tests
+## Per-file coverage after the new tests (PR #36 run)
 
 | File | Statements | Branches | Functions | Lines | Not covered |
 |---|---|---|---|---|---|
@@ -53,6 +65,12 @@ the settings live in the `jest` block of `backend/package.json`.
 | `services/trainSearchService.js` | 100 | 100 | 100 | 100 | |
 
 Every route and every service now has 100 % statement and line coverage.
+
+After PR #44 two of these rows have moved because #39, #40 and #44 changed those files:
+`authService.js` is at 91.66 % branches (not taken: the bcrypt-cost default at line 8, the `|| []`
+fallback for a row with no failure list at 33, a `finally` at 60, and the empty-password default
+at 109) and `bookingService.js` at 97.1 % (`finally` blocks at 138 and 225). Statements and lines
+are still 100 % for both.
 
 ## What was added, and why
 

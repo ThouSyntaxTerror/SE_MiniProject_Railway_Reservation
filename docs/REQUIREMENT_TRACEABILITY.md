@@ -1,6 +1,6 @@
 # Requirement traceability — Team E15
 
-Every SRS identifier → implementation → test → status. Suite on `main` (24 November 2026): 116 backend tests and 57 frontend tests, all passing (it was 55 backend tests when this table was first written).
+Every SRS identifier → implementation → test → status. Suite (24 November 2026, after PR #44): 185 backend tests and 64 frontend tests, all passing (it was 55 backend tests when this table was first written).
 
 ## Functional requirements
 
@@ -10,7 +10,7 @@ Every SRS identifier → implementation → test → status. Suite on `main` (24
 | FR-02 | `services/authService.js` (`login`), `routes/auth.js` | `auth.test.js` login group | Met |
 | FR-03 | `services/trainSearchService.js` (`search`), `pages/Search.jsx` | `search.test.js` | Met |
 | FR-04 | `services/trainSearchService.js` (`availability`) | `availability.test.js` | Met |
-| FR-05 | `services/bookingService.js` (`book`), `paymentSimulator.js` | `booking.test.js` booking group | Met |
+| FR-05 | `services/bookingService.js` (`book`), `paymentSimulator.js` | `booking.test.js` booking group, `bookingEligibility.test.js` (disabled, departed, unknown trips), `idValidation.test.js` | Met |
 | FR-06 | `services/bookingService.js` (`listForUser`), `pages/MyBookings.jsx` | `booking.test.js` history case | Met |
 | FR-07 | `services/bookingService.js` (`cancel`), `routes/bookings.js` | `cancellation.test.js` (9 tests), `cancellationRecord.test.js` (5) | Met |
 | FR-08 | `services/adminService.js`, `routes/admin.js`, `pages/Admin.jsx` | `admin.test.js` | Met |

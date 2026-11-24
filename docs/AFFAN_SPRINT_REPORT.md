@@ -43,15 +43,17 @@ Code written by Affan on `main`, from `git log`: the `cancel` function in `booki
 | #30 | 19 Nov | Fixed My bookings overflowing at 375 px (defect D-07); recorded the three-browser, two-viewport matrix and the keyboard walkthrough (closes #18, #19) | +2,104 −9, 87 files (mostly screenshots) | Merged |
 | #31 | 20 Nov | Redesigned the UI (hero, date strip, filters, journey cards, motion that respects `prefers-reduced-motion`); re-ran the keyboard and viewport matrix on the new design: 27 of 27 steps and 8 of 8 pages in each browser | +2,431 −94, 50 files | Merged |
 | #33 | 20 Nov | `ARCHITECTURE.md`: component, sequence and data-model diagrams | +103 | Merged |
-| #36 | 24 Nov | Code and branch coverage report; 37 new failure-path tests (branch coverage 85.29 % → 94.51 %); unit test report; CI keeps the coverage report | open | Awaiting review |
-| #37 | 24 Nov | System test report; 20-check live API script; UI flow script with screenshots | open | Awaiting review |
-| #38 | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Awaiting review |
-| #39 | 24 Nov | SEC-04 fix: count failures inside any 15-minute span (sliding window), under a row lock, using the database clock (refs #13); 17 tests that move the clock | code + tests | Awaiting review |
-| #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Awaiting review |
-| #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Awaiting review |
-| #42 | 24 Nov | First frontend unit-test suite: 57 tests over every page and the API client (99.42 % statements, 94.57 % branches), run in CI | tests + docs | Awaiting review |
+| #36 | 24 Nov | Code and branch coverage report; 37 new failure-path tests (branch coverage 85.29 % → 94.51 %); unit test report; CI keeps the coverage report | tests + docs | Merged 24 Nov |
+| #37 | 24 Nov | System test report; 20-check live API script; UI flow script with screenshots | docs + scripts | Merged 24 Nov |
+| #38 | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Merged 24 Nov |
+| #39 | 24 Nov | SEC-04 fix: count failures inside any 15-minute span (sliding window), under a row lock, using the database clock (refs #13); 17 tests that move the clock | code + tests | Merged 24 Nov |
+| #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Merged 24 Nov |
+| #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Merged 24 Nov |
+| #42 | 24 Nov | First frontend unit-test suite: 57 tests over every page and the API client (99.42 % statements, 94.57 % branches), run in CI | tests + docs | Merged 24 Nov |
+| #43 | 24 Nov | Test counts in the unit, execution and traceability reports updated to the merged suite (116 backend, 57 frontend) | docs only | Merged 24 Nov |
+| #44 | 24 Nov | Submission pack and SRS validation: deliverables 6–9 as PDFs, README rubric map, sprint burndown from issue data, current coverage, stale statements corrected; fixed four SRS gaps found by validation (disabled or departed trips bookable, unknown or malformed trip ids, no time-zone label, required fields not shown) with 11 backend and 7 frontend tests; after review, one strict id parser for every endpoint (58 more tests) | code + tests + docs | Awaiting review |
 
-On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 assigned issues closed.
+On `main` (24 November 2026, after #43): 47 commits authored by Affan Dumba, 12 merged pull requests (#22, #30, #31, #33, #36 to #43), 5 assigned issues closed. Before 24 November it was 9 commits and 4 pull requests.
 
 ## 3. Work beyond the assigned issues
 
@@ -65,6 +67,7 @@ On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 as
 | Lockout window (#39), cancellation record (#40) | Fix the two code-versus-SRS gaps the design note found, instead of only recording them |
 | Admin pages matrix (#41) | The NFR-05/06 evidence listed the administrator pages as not covered |
 | Frontend unit tests (#42) | The frontend had no automated tests at all; the coverage report listed it as an accepted gap |
+| SRS validation (#44) | Every SRS requirement was checked against the built system; four gaps were fixed and one wording conflict (FR-03) was recorded as D-09. See `SRS_VALIDATION_REPORT.md` |
 
 ## 4. Defects found in own work
 
@@ -74,6 +77,8 @@ On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 as
 | A-01 | Every row of the admin Trips table had buttons named just "Save" and "Disable", so a screen-reader user could not tell which trip each acts on (NFR-05) | The admin-pages matrix | Buttons named per trip, PR #41; 28 of 28 in three browsers |
 | L-01 | Lockout counted consecutive failures instead of failures within 15 minutes (SEC-04), in teammate-written code | Writing the design note | Sliding window, PR #39; the window tests fail against the old logic. A first fixed-window version was itself found weaker than the SRS at the boundary during self-review and replaced before merge |
 | L-02 | `cancelled_utc` and `refund_reference` were never written, so the refund reference vanished after a reload (FR-07) | Writing the design note | Stored and shown, PR #40 |
+| V-01 | A disabled or already-departed trip could be booked; an unknown trip id gave a misleading 409 and a malformed one a 500 (FR-05, UC-01) | SRS validation, probing the running API | Trip checked under a shared lock before a seat is taken, PR #44; 7 of the 11 new tests fail on the old code. Atharv's review found the first id check still too loose (`true`, `[1]`, out-of-range ids); replaced by a strict parser for all endpoints |
+| V-02 | Times shown without a time zone; required fields not shown (SRS §2.4, §3.1) | SRS validation | Labels added, PR #44 |
 
 Writing the failure-path tests (#36) and the system test (#37) found no functional defect.
 
@@ -94,7 +99,7 @@ Writing the failure-path tests (#36) and the system test (#37) found no function
   coverage gaps earlier would have caught the untested rollback and validation branches sooner.
 - **What is still open.** Unknown emails are not rate-limited (no row to count against); the NFR-05/06
   checks cover headless browsers on one machine only (no screen reader, no physical phone); and the
-  deployed-HTTPS checks belong to another team member. Pull requests #36 to #42 are awaiting review.
+  HTTPS was exercised through a local TLS proxy by teammates but never on a public host, because no cloud instance was deployed (D-04). Pull requests #36 to #43 were reviewed and merged by the repository owner on 24 November.
 
 ## 7. Links
 

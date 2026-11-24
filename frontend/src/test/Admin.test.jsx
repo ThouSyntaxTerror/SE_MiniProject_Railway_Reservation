@@ -3,6 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Admin from '../pages/Admin.jsx';
+import { formatDateTime } from '../time.js';
 import { fakeApi } from './fakeApi.js';
 
 const TRIPS = [
@@ -38,6 +39,22 @@ describe('administration page', () => {
     expect(screen.getByText('admin_trip_create')).toBeInTheDocument();
     expect(screen.getByText('—')).toBeInTheDocument(); // an audit row with no actor
     expect(calls.find((c) => c.path.startsWith('/admin/audit')).path).toBe('/admin/audit?limit=25');
+  });
+
+  test('departure and audit times carry a timezone label (SRS §2.4)', async () => {
+    api();
+    render(<Admin />);
+
+    expect(within(await tripRow('12627')).getByText(formatDateTime(TRIPS[0].departure_utc))).toBeInTheDocument();
+    expect(screen.getByText(formatDateTime(AUDIT[0].created_utc))).toBeInTheDocument();
+  });
+
+  test('the create form says every field is required and names the time zone (SRS §2.4, §3.1)', async () => {
+    api();
+    render(<Admin />);
+    await tripRow('12627');
+
+    expect(screen.getByText(/^All fields are required\. Times are in your local time zone \(.+\)\.$/)).toBeInTheDocument();
   });
 
   test('a disabled trip cannot be disabled again', async () => {

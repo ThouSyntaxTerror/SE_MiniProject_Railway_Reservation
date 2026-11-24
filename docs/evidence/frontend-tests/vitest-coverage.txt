@@ -1,52 +1,56 @@
  RUN  v2.1.9 C:/Users/MUHAMMAD AFFAN DUMBA/OneDrive/Desktop/SE_MiniProject_Railway_Reservation/frontend
       Coverage enabled with v8
- ✓ src/test/client.test.js (9 tests) 37ms
- ✓ src/test/MyBookings.test.jsx (6 tests) 536ms
- ✓ src/test/Admin.test.jsx (9 tests) 2151ms
-   ✓ administration page > creating a trip sends numbers and UTC times, shows a notice and clears the form 838ms
- ✓ src/test/App.test.jsx (17 tests) 4329ms
-   ✓ sign-in page (FR-02, SEC-04) > a successful sign-in stores the session and opens search with the user in the navigation 693ms
-   ✓ sign-in page (FR-02, SEC-04) > a wrong password shows the server's generic message and stays on sign-in 437ms
-   ✓ sign-in page (FR-02, SEC-04) > a locked account shows the lockout message (SEC-04) 681ms
-   ✓ registration page (FR-01) > sends name, email and password and goes to sign-in on success 861ms
-   ✓ registration page (FR-01) > shows the server's reason when registration is refused 866ms
- ✓ src/test/Search.test.jsx (16 tests) 8046ms
-   ✓ search > sends origin, destination and date and lists the journeys by departure time (FR-03) 707ms
-   ✓ search > shows the seats left for each journey and disables a sold-out one (FR-04) 525ms
+ ✓ src/test/time.test.js (2 tests) 38ms
+ ✓ src/test/client.test.js (9 tests) 27ms
+ ✓ src/test/MyBookings.test.jsx (7 tests) 537ms
+ ✓ src/test/Admin.test.jsx (11 tests) 2454ms
+   ✓ administration page > creating a trip sends numbers and UTC times, shows a notice and clears the form 939ms
+   ✓ administration page > a refused create shows the server reason and keeps what was typed 323ms
+ ✓ src/test/App.test.jsx (18 tests) 4684ms
+   ✓ sign-in page (FR-02, SEC-04) > a successful sign-in stores the session and opens search with the user in the navigation 709ms
+   ✓ sign-in page (FR-02, SEC-04) > a wrong password shows the server's generic message and stays on sign-in 505ms
+   ✓ sign-in page (FR-02, SEC-04) > a locked account shows the lockout message (SEC-04) 699ms
+   ✓ registration page (FR-01) > sends name, email and password and goes to sign-in on success 906ms
+   ✓ registration page (FR-01) > shows the server's reason when registration is refused 917ms
+ ✓ src/test/Search.test.jsx (17 tests) 9375ms
+   ✓ search > sends origin, destination and date and lists the journeys by departure time (FR-03) 775ms
+   ✓ search > shows the seats left for each journey and disables a sold-out one (FR-04) 546ms
+   ✓ search > says which time zone the departure and arrival times are in (SRS §2.4) 481ms
    ✓ search > the swap button exchanges origin and destination 444ms
-   ✓ filters and sorting > sort by lowest fare and by most seats 738ms
-   ✓ filters and sorting > "Only trains with seats" hides the sold-out journey, and Clear all brings it back 644ms
-   ✓ filters and sorting > the departure-time filter keeps only the chosen part of the day 557ms
-   ✓ filters and sorting > the fare slider hides journeys above the chosen maximum 592ms
-   ✓ filters and sorting > a filter that matches nothing explains why and offers to clear 642ms
-   ✓ filters and sorting > marks the cheapest journey as Best price 420ms
-   ✓ date strip > shows the lowest fare for nearby days and searches again when a day is picked 558ms
-   ✓ booking from the results (FR-05) > Book sends the trip id with a fresh Idempotency-Key and shows the PNR 572ms
-   ✓ booking from the results (FR-05) > two bookings use two different Idempotency-Keys, so they are not mistaken for a retry 662ms
-   ✓ booking from the results (FR-05) > a seat conflict shows the server message and no confirmation 564ms
- Test Files  5 passed (5)
-      Tests  57 passed (57)
-   Start at  12:51:13
-   Duration  11.00s (transform 453ms, setup 2.03s, collect 1.63s, tests 15.10s, environment 5.41s, prepare 1.31s)
+   ✓ filters and sorting > sort by lowest fare and by most seats 816ms
+   ✓ filters and sorting > "Only trains with seats" hides the sold-out journey, and Clear all brings it back 808ms
+   ✓ filters and sorting > the departure-time filter keeps only the chosen part of the day 596ms
+   ✓ filters and sorting > the fare slider hides journeys above the chosen maximum 612ms
+   ✓ filters and sorting > a filter that matches nothing explains why and offers to clear 723ms
+   ✓ filters and sorting > marks the cheapest journey as Best price 477ms
+   ✓ date strip > shows the lowest fare for nearby days and searches again when a day is picked 599ms
+   ✓ booking from the results (FR-05) > Book sends the trip id with a fresh Idempotency-Key and shows the PNR 652ms
+   ✓ booking from the results (FR-05) > two bookings use two different Idempotency-Keys, so they are not mistaken for a retry 755ms
+   ✓ booking from the results (FR-05) > a seat conflict shows the server message and no confirmation 641ms
+ Test Files  6 passed (6)
+      Tests  64 passed (64)
+   Start at  18:09:53
+   Duration  12.68s (transform 706ms, setup 2.43s, collect 2.00s, tests 17.11s, environment 7.36s, prepare 1.71s)
  % Coverage report from v8
 -----------------|---------|----------|---------|---------|-------------------
 File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -----------------|---------|----------|---------|---------|-------------------
-All files        |   99.42 |    94.57 |   98.68 |   99.42 |                   
- src             |     100 |     91.3 |     100 |     100 |                   
+All files        |   99.44 |    94.24 |   98.71 |   99.44 |                   
+ src             |     100 |    88.88 |     100 |     100 |                   
   App.jsx        |     100 |     91.3 |     100 |     100 | 41,68             
+  time.js        |     100 |       75 |     100 |     100 | 10                
  src/api         |     100 |      100 |     100 |     100 |                   
   client.js      |     100 |      100 |     100 |     100 |                   
- src/pages       |    99.3 |    94.11 |   98.43 |    99.3 |                   
-  Admin.jsx      |   98.89 |    96.87 |     100 |   98.89 | 115-116           
+ src/pages       |   99.31 |    94.15 |   98.43 |   99.31 |                   
+  Admin.jsx      |    98.9 |    96.87 |     100 |    98.9 | 118-119           
   Login.jsx      |     100 |      100 |     100 |     100 |                   
   MyBookings.jsx |     100 |      100 |     100 |     100 |                   
   Register.jsx   |     100 |      100 |     100 |     100 |                   
-  Search.jsx     |   99.23 |    91.81 |   97.05 |   99.23 | 116-117,358       
+  Search.jsx     |   99.23 |    91.81 |   97.05 |   99.23 | 117-118,360       
 -----------------|---------|----------|---------|---------|-------------------
 =============================== Coverage summary ===============================
-Statements   : 99.42% ( 861/866 )
-Branches     : 94.57% ( 209/221 )
-Functions    : 98.68% ( 75/76 )
-Lines        : 99.42% ( 861/866 )
+Statements   : 99.44% ( 891/896 )
+Branches     : 94.24% ( 213/226 )
+Functions    : 98.71% ( 77/78 )
+Lines        : 99.44% ( 891/896 )
 ================================================================================

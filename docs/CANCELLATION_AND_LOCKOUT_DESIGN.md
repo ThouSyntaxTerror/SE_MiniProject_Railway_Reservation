@@ -123,7 +123,7 @@ that arrives after the lock is set changes nothing. The "is it locked?" check us
 ## 5. Known limits (not hidden)
 
 Items 1, 3 and 4 were found while writing this note and have since been fixed; they stay listed so
-the history is visible. Until the named pull request is merged, the limit still applies on `main`.
+the history is visible. All three pull requests were merged on 24 November 2026.
 
 1. **Fixed by PR #39.** The lockout counted consecutive failures, not failures "within 15 minutes":
    `failed_attempts` was reset only by a successful sign-in or by locking and never expired, so five wrong

@@ -1,5 +1,6 @@
 const pool = require('../db/pool');
 const { AppError } = require('../middleware/errors');
+const { parseId } = require('../ids');
 
 // FR-03: only trips matching all three filters, departing on or after the requested date,
 // ordered by departure time (SRS §4.1 FR-03).
@@ -25,7 +26,11 @@ async function search({ origin, destination, date }) {
 
 // FR-04: unreserved seats, clamped to [0, capacity]. Disabled trips are not bookable.
 async function availability(tripId) {
-  const { rows } = await pool.query('SELECT capacity, enabled FROM trips WHERE id = $1', [tripId]);
+  const id = parseId(tripId);
+  if (id === null) {
+    throw new AppError(404, 'TRIP_NOT_FOUND', 'Trip not found.');
+  }
+  const { rows } = await pool.query('SELECT capacity, enabled FROM trips WHERE id = $1', [id]);
   const trip = rows[0];
   if (!trip) {
     throw new AppError(404, 'TRIP_NOT_FOUND', 'Trip not found.');
@@ -37,7 +42,7 @@ async function availability(tripId) {
     [tripId]
   );
   const unreserved = Math.min(trip.capacity, Math.max(0, trip.capacity - countRows[0].confirmed));
-  return { tripId: Number(tripId), capacity: trip.capacity, unreserved, enabled: trip.enabled };
+  return { tripId: id, capacity: trip.capacity, unreserved, enabled: trip.enabled };
 }
 
 module.exports = { search, availability };

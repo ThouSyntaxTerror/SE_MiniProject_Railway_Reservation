@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../api/client.js';
+import { timeZoneLabel } from '../time.js';
 
 const pad = (n) => String(n).padStart(2, '0');
 const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -343,6 +344,7 @@ export default function Search() {
                   {searched.origin} → {searched.destination} •{' '}
                   {fromISO(searched.date).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
                 </span>
+                <span className="subtle tz-note">Times shown in {timeZoneLabel()}</span>
               </div>
               <div className="sort">
                 <label htmlFor="sort">Sort by</label>

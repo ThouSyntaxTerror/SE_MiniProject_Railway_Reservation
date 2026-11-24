@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../api/client.js';
+import { formatDateTime, timeZoneLabel } from '../time.js';
 
 const EMPTY_TRIP = {
   train_number: '',
@@ -17,7 +18,7 @@ function TripRow({ trip, onSave, onDisable }) {
     <tr>
       <td>{trip.train_number}</td>
       <td>{trip.origin} → {trip.destination}</td>
-      <td>{new Date(trip.departure_utc).toLocaleString()}</td>
+      <td>{formatDateTime(trip.departure_utc)}</td>
       <td>
         <label className="sr-only" htmlFor={`capacity-${trip.id}`}>Capacity for {trip.train_number}</label>
         <input
@@ -126,6 +127,7 @@ export default function Admin() {
 
       <section aria-labelledby="create-trip-heading">
         <h2 id="create-trip-heading">Create trip</h2>
+        <p className="subtle form-note">All fields are required. Times are in your local time zone ({timeZoneLabel()}).</p>
         <form onSubmit={onCreate} className="grid-form" noValidate>
           <label htmlFor="train_number">Train number</label>
           <input id="train_number" value={form.train_number} onChange={(e) => update('train_number', e.target.value)} required />
@@ -192,7 +194,7 @@ export default function Admin() {
             <tbody>
               {audit.map((event) => (
                 <tr key={event.id}>
-                  <td>{new Date(event.created_utc).toLocaleString()}</td>
+                  <td>{formatDateTime(event.created_utc)}</td>
                   <td>{event.actor_email || '—'}</td>
                   <td>{event.action}</td>
                   <td>{event.outcome}</td>

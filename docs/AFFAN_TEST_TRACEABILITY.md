@@ -17,7 +17,7 @@ Key to the evidence column:
 | § | Added by PR #39 (lockout window), #40 (cancellation record) or #41 (admin pages) | `lockoutWindow.test.js`, `cancellationRecord.test.js`, `docs/evidence/admin-matrix/` |
 | M | Manual or browser-driven evidence | `docs/evidence/…` |
 
-†, ‡ and § items only exist once those pull requests are merged.
+All of these pull requests were merged on 24 November 2026, so every item below is on `main`.
 
 ## FR-05 Booking (issue #5, Sprint 1)
 
@@ -53,7 +53,7 @@ Key to the evidence column:
 | ... **within 15 minutes** | § `lockoutWindow.test.js`: failures older than 15 minutes do not count; failures spread over three windows never lock; failures 14 minutes apart still do; a burst that straddles the 15-minute mark still locks (sliding, not fixed, window). Shown to fail against the old logic |
 | Attempts are logged without the submitted password | `auth.test.js`: sign-ins audited without passwords. `security.test.js`: no password in responses or audit rows. ‡ TC-02d/e |
 | Unknown email and wrong password are indistinguishable (FR-02) | `auth.test.js`: generic error. ‡ TC-02a. † `errorPaths.test.js` sign-in validation (empty body, missing email, missing password: same 401) |
-| **Until PR #39 is merged** | `main` counts consecutive failures rather than failures within 15 minutes, and nothing tests the clock; see `CANCELLATION_AND_LOCKOUT_DESIGN.md` section 5 |
+| **History** | Before PR #39 the code counted consecutive failures rather than failures within 15 minutes, and nothing tested the clock; see `CANCELLATION_AND_LOCKOUT_DESIGN.md` section 5 |
 
 ## NFR-05 Accessibility (issue #18, Sprint 2)
 
@@ -78,6 +78,6 @@ Key to the evidence column:
 |---|---|---|
 | FR-05 | Yes | A payment failure is checked in Jest only, not on a live server |
 | FR-07 | Yes | None found |
-| SEC-04 | Yes, with PR #39 | Without #39, the 15-minute window is neither implemented nor tested |
-| NFR-05 | Yes, on one machine in headless browsers (admin pages with PR #41) | No screen reader |
-| NFR-06 | Yes, on one machine in headless browsers (admin pages with PR #41) | No physical phone |
+| SEC-04 | Yes (sliding window and lock expiry tested since PR #39) | The lock is per account; unknown emails are not rate-limited |
+| NFR-05 | Yes, on one machine in headless browsers, passenger and admin pages | No screen reader |
+| NFR-06 | Yes, on one machine in headless browsers, passenger and admin pages | No physical phone |

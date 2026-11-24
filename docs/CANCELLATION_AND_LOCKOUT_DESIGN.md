@@ -1,7 +1,7 @@
 # Design note: booking, cancellation and sign-in lockout (FR-05, FR-07, SEC-04)
 
 A supplement to the architecture document
-([`03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272.pdf`](../03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272.pdf))
+([`03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272_with_Architectural_Diagram.pdf`](../03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272_with_Architectural_Diagram.pdf))
 and to [`ARCHITECTURE.md`](ARCHITECTURE.md). It records, for the three features assigned to Affan,
 what the code on `main` actually does and why, so a reviewer can check the behaviour against the
 SRS without reading the source. Where the code is weaker than the SRS it says so (section 5).

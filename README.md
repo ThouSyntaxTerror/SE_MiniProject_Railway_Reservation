@@ -12,7 +12,7 @@ with a refund reference, administrator trip/capacity management, and an audit tr
 |---|---|---|
 | 1 | [Software Requirements Specification](01_SRS_Mohit_Singh_P_PES1UG24CS273.pdf) | Mohit Singh P (PES1UG24CS273) |
 | 2 | [Test Plan](02_Test_Plan_Atharv_More_PES1UG24CS276.pdf) | Atharv More (PES1UG24CS276) |
-| 3 | [Software Architecture and Design Specification](03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272.pdf) | Mohammed Rizwan Shaikh (PES1UG24CS272) |
+| 3 | [Software Architecture and Design Specification](03_Architecture_Design_Mohammed_Rizwan_Shaikh_PES1UG24CS272_with_Architectural_Diagram.pdf) | Mohammed Rizwan Shaikh (PES1UG24CS272) |
 | 4 | [Test Case Update](04_Test_Case_Update_Muhammad_Affan_Dumba_PES1UG24CS280.pdf) | Muhammad Affan Dumba (PES1UG24CS280) |
 | 5 | [Test Execution Report](05_Test_Execution_Report_Team_E15.pdf) | Team E15 (Sprint 2 results) |
 

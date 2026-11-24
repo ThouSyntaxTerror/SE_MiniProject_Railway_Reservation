@@ -77,7 +77,7 @@ badge reads Cancelled, so a wrong value would have failed the run.
 | Not covered here | Where it is covered instead |
 |---|---|
 | Payment failure (TC-05, the first half) | Cannot be forced on a live server because the simulator only fails when a test switches it. Covered in `booking.test.js` and `cancellation.test.js` (failed payment creates no booking; failed refund leaves the booking cancelled). |
-| HTTPS, 30-minute idle expiry on a deployed instance (TC-09) | Open items for Atharv in `TEST_EXECUTION_REPORT.md` |
+| HTTPS and the 30-minute idle expiry (TC-09) | Exercised through a local TLS reverse proxy and recorded in `TEST_EXECUTION_REPORT.md` (TC-09 and the manual checks). Not on a public host: no cloud instance was deployed (D-04) |
 | Search and booking speed under load (NFR-01, NFR-02) | `npm run test:load` results in the execution report |
 | Three browsers at 375 px and 1280 px, keyboard-only walkthrough (NFR-05, NFR-06) | `evidence/nfr05-nfr06/RESULTS.md` |
 | Administrator screens in the browser | Admin API is checked here and in `admin.test.js`; the admin pages are walked through with the keyboard in three browsers in `evidence/admin-matrix/RESULTS.md` (PR #41) and unit-tested in `FRONTEND_TEST_REPORT.md` (PR #42) |

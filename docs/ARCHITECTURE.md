@@ -100,4 +100,4 @@ Two database rules carry the correctness guarantees:
 - Passwords are stored as salted hashes (SEC-02); five failed sign-ins lock an account for 15 minutes (SEC-04).
 - Every sign-in, booking, cancellation and admin change is written to `audit_events` (FR-09).
 - `GET /health` supports restart and recovery checks (NFR-04).
-- HTTPS is configured for deployment (see [`HTTPS_DEPLOYMENT.md`](HTTPS_DEPLOYMENT.md)) but has not been exercised on a deployed instance yet, so it is not claimed as verified.
+- HTTPS is configured for deployment (see [`HTTPS_DEPLOYMENT.md`](HTTPS_DEPLOYMENT.md)) and was exercised end to end through a local self-signed TLS reverse proxy, including the 30-minute session expiry (TC-09 in [`TEST_EXECUTION_REPORT.md`](TEST_EXECUTION_REPORT.md)). No cloud instance was deployed (deviation D-04), so it has not been checked on a public host.

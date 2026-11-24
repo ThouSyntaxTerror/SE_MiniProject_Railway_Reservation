@@ -43,15 +43,17 @@ Code written by Affan on `main`, from `git log`: the `cancel` function in `booki
 | #30 | 19 Nov | Fixed My bookings overflowing at 375 px (defect D-07); recorded the three-browser, two-viewport matrix and the keyboard walkthrough (closes #18, #19) | +2,104 −9, 87 files (mostly screenshots) | Merged |
 | #31 | 20 Nov | Redesigned the UI (hero, date strip, filters, journey cards, motion that respects `prefers-reduced-motion`); re-ran the keyboard and viewport matrix on the new design: 27 of 27 steps and 8 of 8 pages in each browser | +2,431 −94, 50 files | Merged |
 | #33 | 20 Nov | `ARCHITECTURE.md`: component, sequence and data-model diagrams | +103 | Merged |
-| #36 | 24 Nov | Code and branch coverage report; 37 new failure-path tests (branch coverage 85.29 % → 94.51 %); unit test report; CI keeps the coverage report | open | Awaiting review |
-| #37 | 24 Nov | System test report; 20-check live API script; UI flow script with screenshots | open | Awaiting review |
-| #38 | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Awaiting review |
-| #39 | 24 Nov | SEC-04 fix: count failures inside any 15-minute span (sliding window), under a row lock, using the database clock (refs #13); 17 tests that move the clock | code + tests | Awaiting review |
-| #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Awaiting review |
-| #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Awaiting review |
-| #42 | 24 Nov | First frontend unit-test suite: 57 tests over every page and the API client (99.42 % statements, 94.57 % branches), run in CI | tests + docs | Awaiting review |
+| #36 | 24 Nov | Code and branch coverage report; 37 new failure-path tests (branch coverage 85.29 % → 94.51 %); unit test report; CI keeps the coverage report | tests + docs | Merged 24 Nov |
+| #37 | 24 Nov | System test report; 20-check live API script; UI flow script with screenshots | docs + scripts | Merged 24 Nov |
+| #38 | 24 Nov | Design note for FR-05, FR-07, SEC-04; clause-level test traceability; this report; corrections to the team traceability table | docs only | Merged 24 Nov |
+| #39 | 24 Nov | SEC-04 fix: count failures inside any 15-minute span (sliding window), under a row lock, using the database clock (refs #13); 17 tests that move the clock | code + tests | Merged 24 Nov |
+| #40 | 24 Nov | FR-07: store the cancellation time and refund reference on the booking, return them in history, show the reference in My bookings after a reload; 5 tests | code + tests | Merged 24 Nov |
+| #41 | 24 Nov | NFR-05/06 on the administrator pages: keyboard-only walkthrough and 375/1280 px check in three browsers (28 of 28 each); fixed row buttons that were all named "Save" / "Disable" | code + evidence | Merged 24 Nov |
+| #42 | 24 Nov | First frontend unit-test suite: 57 tests over every page and the API client (99.42 % statements, 94.57 % branches), run in CI | tests + docs | Merged 24 Nov |
+| #43 | 24 Nov | Test counts in the unit, execution and traceability reports updated to the merged suite (116 backend, 57 frontend) | docs only | Merged 24 Nov |
+| this PR | 24 Nov | Submission pack: deliverables 6–8 as PDFs, README rubric map, sprint burndown from issue data, coverage figures for `main`, stale HTTPS and status statements corrected | docs + scripts | Awaiting review |
 
-On `main` today: 9 commits authored by Affan Dumba, 4 merged pull requests, 5 assigned issues closed.
+On `main` (24 November 2026, after #43): 47 commits authored by Affan Dumba, 12 merged pull requests (#22, #30, #31, #33, #36 to #43), 5 assigned issues closed. Before 24 November it was 9 commits and 4 pull requests.
 
 ## 3. Work beyond the assigned issues
 
@@ -94,7 +96,7 @@ Writing the failure-path tests (#36) and the system test (#37) found no function
   coverage gaps earlier would have caught the untested rollback and validation branches sooner.
 - **What is still open.** Unknown emails are not rate-limited (no row to count against); the NFR-05/06
   checks cover headless browsers on one machine only (no screen reader, no physical phone); and the
-  deployed-HTTPS checks belong to another team member. Pull requests #36 to #42 are awaiting review.
+  HTTPS was exercised through a local TLS proxy by teammates but never on a public host, because no cloud instance was deployed (D-04). Pull requests #36 to #43 were reviewed and merged by the repository owner on 24 November.
 
 ## 7. Links
 

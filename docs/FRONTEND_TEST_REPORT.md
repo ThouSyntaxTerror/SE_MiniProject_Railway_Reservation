@@ -60,7 +60,7 @@ All four failing tests passed again once the code was restored.
 ## Limits
 
 - jsdom is not a real browser: layout, focus rings and screen-reader output are not tested here. Those
-  are covered by the Selenium matrices in `evidence/nfr05-nfr06/` and (with PR #41)
+  are covered by the Selenium matrices in `evidence/nfr05-nfr06/` and
   `evidence/admin-matrix/`.
 - The API is faked, so these tests do not prove the server agrees; the backend Jest suite and the live
   system test do that.

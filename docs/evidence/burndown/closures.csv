@@ -1,0 +1,20 @@
+sprint,issue,title,points,assignee,closed_ist
+Sprint 1,#7,"FR-09 Audit logging (sign-in, booking, cancellation, admin changes)",5,ThouSyntaxTerror,2026-11-19 12:41:36
+Sprint 1,#11,"FR-08 Admin trip/capacity CRUD, 403 for non-admins",5,TheNonConformist,2026-11-19 13:26:37
+Sprint 1,#10,"FR-07 Cancellation (ownership/time check, single seat release, refund ref)",5,affandumba,2026-11-19 13:28:04
+Sprint 1,#1,FR-01 Registration: create account with unique email + 12-char password,5,MACHINEKILLER07,2026-11-19 13:46:53
+Sprint 1,#3,"FR-03 Train search by origin/destination/date, ordered by departure",8,MACHINEKILLER07,2026-11-19 13:46:54
+Sprint 1,#9,SEC-03 HTTPS + session expiry (30 min) / invalidate on sign-out,5,ThouSyntaxTerror,2026-11-19 13:47:27
+Sprint 1,#8,"SEC-02 Password hashing, no plaintext anywhere",2,ThouSyntaxTerror,2026-11-19 13:47:27
+Sprint 1,#12,SEC-01 Server-side access control on all booking/admin endpoints,5,ThouSyntaxTerror,2026-11-19 13:47:29
+Sprint 1,#2,"FR-02 Authentication: session issuance, generic invalid-login error",3,MACHINEKILLER07,2026-11-19 13:54:49
+Sprint 1,#5,FR-05 Idempotent booking + seat hold + payment-sim + PNR,5,affandumba,2026-11-19 13:54:51
+Sprint 1,#6,FR-06 Booking history (passenger-scoped),3,MACHINEKILLER07,2026-11-19 13:54:52
+Sprint 1,#13,SEC-04 Lockout after 5 failed logins / 15 min,5,affandumba,2026-11-19 13:54:53
+Sprint 2,#4,FR-04 Seat availability display (0..capacity bound),3,TheNonConformist,2026-11-19 13:48:05
+Sprint 2,#14,NFR-01 Search perf: 95% < 2s @ 10k trips / 50 users,3,TheNonConformist,2026-11-19 13:54:55
+Sprint 2,#15,NFR-02 Booking perf: 95% < 3s @ 50 users,3,TheNonConformist,2026-11-19 13:54:56
+Sprint 2,#16,NFR-03 Concurrency: no overbooking on last-seat race,5,TheNonConformist,2026-11-19 13:54:57
+Sprint 2,#17,NFR-04 Restart recovery + health check < 60s,2,ThouSyntaxTerror,2026-11-19 13:54:59
+Sprint 2,#18,NFR-05 Keyboard accessibility + accessible names,2,affandumba,2026-11-19 18:50:39
+Sprint 2,#19,NFR-06 Cross-browser/viewport compatibility,2,affandumba,2026-11-19 18:50:41

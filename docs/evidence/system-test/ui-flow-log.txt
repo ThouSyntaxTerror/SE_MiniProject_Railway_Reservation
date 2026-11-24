@@ -1,0 +1,7 @@
+1 signed in, on /search
+2 search results shown for Bengaluru to Chennai
+3 booking banner: Booked. PNR 34FD1F1D, seat 1 on train 12627. View in My bookings
+4 My bookings shows 34FD1F1D confirmed
+5 cancel notice: Booking 34FD1F1D cancelled. Refund reference: RFND-34FD1F1D
+6 status badge now: Cancelled
+RESULT PASS: refund reference RFND-34FD1F1D shown and status Cancelled

@@ -3,7 +3,7 @@
 Build under test: Sprint 2 integration (`feat/fr08-admin` + `feat/fr01-fr03-passenger` +
 `feat/fr05-fr07-cancellation` + `test/security-recovery` + `test/fr04-availability`).
 Environment: Node 22 (CI) / Node 26 (local), PostgreSQL 16, Chrome/Edge/Firefox (manual checks),
-19 November 2026. Merged stack: `cd backend && npm test` — **55 tests, 55 passed, 8 suites** (verified on `integration/final`). This documents-only PR runs the foundation subset until the code PRs merge.
+19 November 2026. Merged stack: `cd backend && npm test` — **94 tests, 94 passed, 10 suites** (24 November 2026, after the failure-path tests were added; it was 55 tests in 8 suites on `integration/final` on 19 November and 57 on `main` before this change). Per-file breakdown: [`UNIT_TEST_REPORT.md`](UNIT_TEST_REPORT.md); coverage (97.95 % statements, 94.51 % branches): [`CODE_BRANCH_COVERAGE_REPORT.md`](CODE_BRANCH_COVERAGE_REPORT.md). This documents-only PR runs the foundation subset until the code PRs merge.
 
 The cases below are the ten specifications from Test Plan §5.2. "Executed" records what was
 actually run; the automated suite is executed by GitHub Actions on every pull request.

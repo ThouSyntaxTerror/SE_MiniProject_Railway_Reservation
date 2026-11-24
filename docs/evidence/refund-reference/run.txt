@@ -1,0 +1,4 @@
+no refund text before cancel: True
+after reload: Refund RFND-B4213F32 | banner present: False
+375px page scrollWidth/innerWidth: [375, 375] no page overflow: True
+RESULT PASS

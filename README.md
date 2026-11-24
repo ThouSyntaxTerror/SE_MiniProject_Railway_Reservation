@@ -18,9 +18,35 @@ with a refund reference, administrator trip/capacity management, and an audit tr
 
 The Test Case Update is also incorporated into §5.2 of the Test Plan, as required.
 
+## Part 3 deliverables
+
+| # | Document | Owner | Markdown source |
+|---|---|---|---|
+| 6 | [Unit Test Report](06_Unit_Test_Report_Muhammad_Affan_Dumba_PES1UG24CS280.pdf) | Muhammad Affan Dumba (PES1UG24CS280) | [`docs/UNIT_TEST_REPORT.md`](docs/UNIT_TEST_REPORT.md), [`docs/FRONTEND_TEST_REPORT.md`](docs/FRONTEND_TEST_REPORT.md) |
+| 7 | [System Test Report](07_System_Test_Report_Muhammad_Affan_Dumba_PES1UG24CS280.pdf) | Muhammad Affan Dumba (PES1UG24CS280) | [`docs/SYSTEM_TEST_REPORT.md`](docs/SYSTEM_TEST_REPORT.md) |
+| 8 | [Code and Branch Coverage Report](08_Code_and_Branch_Coverage_Report_Muhammad_Affan_Dumba_PES1UG24CS280.pdf) | Muhammad Affan Dumba (PES1UG24CS280) | [`docs/CODE_BRANCH_COVERAGE_REPORT.md`](docs/CODE_BRANCH_COVERAGE_REPORT.md) |
+
+The PDFs are rendered from the markdown with `python scripts/renderReports.py`, so the two always match.
+The Test Execution Report (5) is the 20 November snapshot; the current figures are in 6 to 8.
+
+## Where each rubric item is
+
+| Rubric item | Evidence |
+|---|---|
+| SRS | Deliverable 1 |
+| Test Plan | Deliverable 2, with the Test Case Update (4) as §5.2; clause-level mapping in [`docs/AFFAN_TEST_TRACEABILITY.md`](docs/AFFAN_TEST_TRACEABILITY.md) |
+| SAD | Deliverable 3; [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (component, sequence and data-model diagrams); [`docs/CANCELLATION_AND_LOCKOUT_DESIGN.md`](docs/CANCELLATION_AND_LOCKOUT_DESIGN.md) |
+| Backlog creation | Issues #1–#19 with story-point labels and Sprint milestones; [`docs/GITHUB_PROJECT_BACKLOG.md`](docs/GITHUB_PROJECT_BACKLOG.md) |
+| Sprint 1 and Sprint 2 | [`docs/SPRINT_LOG.md`](docs/SPRINT_LOG.md), [`docs/SPRINT_BURNDOWN.md`](docs/SPRINT_BURNDOWN.md), the two demo videos, milestones *Sprint 1* and *Sprint 2* |
+| Unit Test Report | Deliverable 6: 116 backend + 57 frontend tests, all passing |
+| System Test Report | Deliverable 7: 20 live API checks, a UI book-and-cancel flow, keyboard and viewport checks in three browsers; Deliverable 5 for the ten formal test cases |
+| Code and Branch Coverage Report | Deliverable 8: backend 98.07 % statements / 94.14 % branches; frontend 99.42 % / 94.57 % |
+| Demonstration | [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) and the demo videos; run the app with the steps below |
+
 ## Part 2 evidence
 
-- [Sprint log](docs/SPRINT_LOG.md) and [backlog / story points](docs/GITHUB_PROJECT_BACKLOG.md)
+- [Sprint log](docs/SPRINT_LOG.md), [sprint burndown](docs/SPRINT_BURNDOWN.md) and [backlog / story points](docs/GITHUB_PROJECT_BACKLOG.md)
+- [Architecture overview](docs/ARCHITECTURE.md) with Mermaid diagrams
 - [Requirement traceability](docs/REQUIREMENT_TRACEABILITY.md)
 - [Test execution report](docs/TEST_EXECUTION_REPORT.md) (all ten TCs)
 - [Deviations](docs/DEVIATIONS.md)
@@ -56,10 +82,22 @@ Demo accounts created by `npm run migrate`:
 
 ```bash
 cd backend
-npm test                             # 55 Jest/Supertest tests, real Postgres
+npm test                             # 116 Jest/Supertest tests, real Postgres
+npm run test:coverage                # the same suite with statement and branch coverage
 npm run seed:perf                    # 10,000 trips for NFR-01
 npm run test:load -- --base http://localhost:3000
 ./scripts/recoveryCheck.sh http://localhost:3000   # NFR-04 restart evidence
+
+cd ../frontend
+npm test                             # 57 Vitest + Testing Library tests
+npm run test:coverage
+
+# with the API on :3000 and the UI on :5173
+node scripts/systemTest.js                         # 20 live API checks
+python scripts/uiFlow.py docs/evidence/system-test # book and cancel in the real UI
+python scripts/adminMatrix.py chrome docs/evidence/admin-matrix   # also edge, firefox
+python scripts/burndown.py                         # sprint burndown from GitHub issue closures
+python scripts/renderReports.py                    # deliverables 6-8 as PDF
 ```
 
 Recorded on 19 November 2026 (Postgres 16, Node 22):

@@ -28,11 +28,13 @@ function TripRow({ trip, onSave, onDisable }) {
           onChange={(e) => setCapacity(e.target.value)}
           className="inline-number"
         />
-        <button type="button" onClick={() => onSave(trip, capacity)}>Save</button>
+        <button type="button" onClick={() => onSave(trip, capacity)} aria-label={`Save capacity for ${trip.train_number}`}>
+          Save
+        </button>
       </td>
       <td>{trip.enabled ? 'Yes' : 'No'}</td>
       <td>
-        <button type="button" onClick={() => onDisable(trip)} disabled={!trip.enabled}>
+        <button type="button" onClick={() => onDisable(trip)} disabled={!trip.enabled} aria-label={`Disable trip ${trip.train_number}`}>
           Disable
         </button>
       </td>

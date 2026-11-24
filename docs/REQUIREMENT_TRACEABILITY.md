@@ -12,7 +12,7 @@ Every SRS identifier → implementation → test → status. Suite: 55 automated
 | FR-04 | `services/trainSearchService.js` (`availability`) | `availability.test.js` | Met |
 | FR-05 | `services/bookingService.js` (`book`), `paymentSimulator.js` | `booking.test.js` booking group | Met |
 | FR-06 | `services/bookingService.js` (`listForUser`), `pages/MyBookings.jsx` | `booking.test.js` history case | Met |
-| FR-07 | `services/bookingService.js` (`cancel`), `routes/bookings.js` | `booking.test.js` cancellation group | Met |
+| FR-07 | `services/bookingService.js` (`cancel`), `routes/bookings.js` | `cancellation.test.js` (9 tests) | Met |
 | FR-08 | `services/adminService.js`, `routes/admin.js`, `pages/Admin.jsx` | `admin.test.js` | Met |
 | FR-09 | `services/auditService.js`, all services, `GET /api/admin/audit` | `auth.test.js`, `booking.test.js`, `admin.test.js` | Met |
 
@@ -24,8 +24,8 @@ Every SRS identifier → implementation → test → status. Suite: 55 automated
 | NFR-02 | transactional booking, same load script | p95 456 ms | Met |
 | NFR-03 | `FOR UPDATE SKIP LOCKED` + partial unique index | 20-way race test | Met |
 | NFR-04 | DB-backed sessions/bookings, `/health`, `scripts/recoveryCheck.sh` | 691 ms, booking persisted | Met |
-| NFR-05 | labels on every input, `aria-label` nav, `.sr-only`, focus-visible, skip link | manual checklist | Implemented; manual sign-off |
-| NFR-06 | responsive CSS, `.table-wrap`, viewport meta | manual matrix | Implemented; manual sign-off |
+| NFR-05 | labels on every input, `aria-label` nav, `.sr-only`, focus-visible, skip link | keyboard matrix, `evidence/nfr05-nfr06/RESULTS.md` (27/27 steps in Chrome, Edge, Firefox; headless, one machine) | Met |
+| NFR-06 | responsive CSS, `.table-wrap`, viewport meta | viewport matrix, `evidence/nfr05-nfr06/RESULTS.md` (8/8 pages, 3 browsers, 375 and 1280 px; headless, one machine) | Met |
 
 ## Security requirements
 
@@ -45,3 +45,6 @@ SEC-03, NFR-04 · TC-10 → NFR-01, NFR-02, NFR-05, NFR-06.
 
 Every FR, NFR and SEC identifier is covered by at least one automated test or a named manual
 check; there are no untraced identifiers.
+
+Clause-level mapping for FR-05, FR-07, SEC-04, NFR-05 and NFR-06 (including the clauses with no check):
+[`AFFAN_TEST_TRACEABILITY.md`](AFFAN_TEST_TRACEABILITY.md).

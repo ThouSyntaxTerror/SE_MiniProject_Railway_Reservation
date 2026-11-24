@@ -14,6 +14,8 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS name TEXT NOT NULL DEFAULT '';
 -- SEC-04: lockout state.
 ALTER TABLE users ADD COLUMN IF NOT EXISTS failed_attempts INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS locked_until TIMESTAMPTZ;
+-- Times of the failed sign-ins in the last 15 minutes (a sliding window); older ones are dropped.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS recent_failures TIMESTAMPTZ[] NOT NULL DEFAULT '{}';
 
 CREATE TABLE IF NOT EXISTS sessions (
   token TEXT PRIMARY KEY,

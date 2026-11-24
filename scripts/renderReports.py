@@ -1,4 +1,4 @@
-"""Render the Part 3 test reports (markdown in docs/) as numbered PDFs next to deliverables 01-05.
+"""Render the Part 3 test reports and the SRS validation report (markdown in docs/) as numbered PDFs next to deliverables 01-05.
 
     pip install markdown selenium
     python scripts/renderReports.py
@@ -44,6 +44,12 @@ REPORTS = [
         'out': '08_Code_and_Branch_Coverage_Report_Muhammad_Affan_Dumba_PES1UG24CS280.pdf',
         'title': 'Code and Branch Coverage Report',
         'sources': ['CODE_BRANCH_COVERAGE_REPORT.md'],
+        'images': [],
+    },
+    {
+        'out': '09_SRS_Validation_Report_Muhammad_Affan_Dumba_PES1UG24CS280.pdf',
+        'title': 'SRS Validation Report',
+        'sources': ['SRS_VALIDATION_REPORT.md'],
         'images': [],
     },
 ]

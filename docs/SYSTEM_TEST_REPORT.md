@@ -80,7 +80,7 @@ badge reads Cancelled, so a wrong value would have failed the run.
 | HTTPS, 30-minute idle expiry on a deployed instance (TC-09) | Open items for Atharv in `TEST_EXECUTION_REPORT.md` |
 | Search and booking speed under load (NFR-01, NFR-02) | `npm run test:load` results in the execution report |
 | Three browsers at 375 px and 1280 px, keyboard-only walkthrough (NFR-05, NFR-06) | `evidence/nfr05-nfr06/RESULTS.md` |
-| Administrator screens in the browser | Admin API is checked here and in `admin.test.js`; the admin pages were not walked through in a browser |
+| Administrator screens in the browser | Admin API is checked here and in `admin.test.js`; the admin pages are walked through with the keyboard in three browsers in `evidence/admin-matrix/RESULTS.md` (PR #41) and unit-tested in `FRONTEND_TEST_REPORT.md` (PR #42) |
 | A physical phone, a screen reader | Not done |
 
 ## Limits of this evidence
